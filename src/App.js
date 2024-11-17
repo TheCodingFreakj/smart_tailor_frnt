@@ -1,25 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import React from "react"
+import React, { Fragment } from "react"
 import axios from "axios"
 
 
-import { AppProvider } from '@shopify/app-bridge-react';
-function getShopFromUrl() {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get('shop');  // This retrieves the value of the 'shop' parameter
-}
-
-const shop = getShopFromUrl();
-console.log(shop)
-const config = {
-  apiKey: '1e49496f044a9cc3a5b89a5e12a3b493',
-  shopOrigin: shop, // Pass shop name dynamically
-  forceRedirect: true,
-};
-
 function App() {
-
   const [data, setData] = React.useState("")
   React.useEffect(() => {
 
@@ -29,7 +14,10 @@ function App() {
     }, []);
   })
   return (
-    <AppProvider config={config}>
+  <Fragment>
+
+      {/* Example App Bridge Component */}
+      <TitleBar title="My Shopify App" />
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
@@ -46,11 +34,12 @@ function App() {
           </a>
         </header>
       </div>
-    </AppProvider>
+
+  </Fragment>
+
+   
   );
 }
 
-
-
-
 export default App;
+

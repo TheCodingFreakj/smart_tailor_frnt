@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@mui/material": "^6.1.7",
+    "@shopify/app-bridge": "^3.7.10",
     "@shopify/app-bridge-react": "^4.1.5",
     "@shopify/polaris": "^13.9.1",
     "@testing-library/jest-dom": "^5.17.0",
