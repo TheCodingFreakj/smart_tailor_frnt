@@ -9,7 +9,7 @@ const ProtectedRoute = ({isInstalled, params, children }) => {
 
 const navigate = useNavigate();
 
-if(params.has("shop") && !isInstalled){
+if(params.has("shop") || !isInstalled){
 
     navigate("/error")
 
