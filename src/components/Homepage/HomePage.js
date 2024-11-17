@@ -16,8 +16,7 @@ function HomePage({isInstalled,isLoading, params,firstTime}) {
   })
   return (
   <Fragment>
-    {isLoading && <div>...Loading</div>}
-      <div className="App">
+    {isLoading ? <div>...Loading</div> :  <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
@@ -32,7 +31,8 @@ function HomePage({isInstalled,isLoading, params,firstTime}) {
             {data}
           </a>
         </header>
-      </div>
+      </div>}
+     
 
   </Fragment>
 
