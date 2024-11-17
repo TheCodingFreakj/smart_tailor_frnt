@@ -21,7 +21,7 @@ export const checkInstallation = async (shopDomain) => {
       { headers: { "Content-Type": "application/json" } } // Ensure JSON header
     );
 
-    return response.data.installed
+    return response.data
   } catch (error) {
     console.error("API call failed:", error.response?.data || error.message);
   }

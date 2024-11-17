@@ -6,28 +6,40 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import { checkInstallation } from './utils/api';
 
 function App() {
-const [isInstalled, setIsInstalled] = React.useState(false);
-const params = new URLSearchParams(window.location.search);
-const shopDomain = params.get("shop");
+  const [isInstalled, setIsInstalled] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [firstTime, setFirstTime] = React.useState(true);
+  const params = new URLSearchParams(window.location.search);
+  const shopDomain = params.get("shop");
+  console.log(params.has("shop"))
 
 
-if (params.has("shop") && shopDomain) {
-  console.log(`Shop parameter exists: ${shopDomain}`);
-  const isInstalledVar = checkInstallation(shopDomain);
-  setIsInstalled(isInstalledVar)
-} 
+ React.useEffect(()=>{
+
+
+  if (params.has("shop") && shopDomain) {
+    console.log(`Shop parameter exists: ${shopDomain}`);
+    const response = checkInstallation(shopDomain);
+    setIsInstalled(response.is_installed)
+    setFirstTime(response.first_time)
+    setIsLoading(false)
+  } else {
+    setIsLoading(true)
+  }
+ },[])
 
 
 
   return (
-    <Router>
+
+    isLoading == true ? <div>.....Loading</div> : <Router>
       <Routes>
         {/* Define the /error route with the ErrorPage component */}
         <Route path="/error" element={<ErrorPage />} />
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute isInstalled={isInstalled} params={params}>
+            <ProtectedRoute isInstalled={isInstalled} params={params} firstTime={firstTime}>
               <HomePage />
             </ProtectedRoute>
           }
@@ -35,7 +47,10 @@ if (params.has("shop") && shopDomain) {
 
       </Routes>
     </Router>
-  );
+
+  )
+
+
 }
 
 export default App;
