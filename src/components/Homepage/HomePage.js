@@ -16,6 +16,7 @@ function HomePage({isInstalled, params,firstTime}) {
   })
   return (
   <Fragment>
+    {isLoading && <div>...Loading</div>}
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />

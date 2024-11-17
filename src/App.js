@@ -30,15 +30,14 @@ function App() {
 
   return (
 
-    isLoading == true ? <div>.....Loading</div> : <Router>
+    <Router>
       <Routes>
-        {/* Define the /error route with the ErrorPage component */}
         <Route path="/error" element={<ErrorPage />} />
         <Route
           path="/dashboard"
           element={
             // <ProtectedRoute isInstalled={isInstalled} params={params} firstTime={firstTime}>
-              <HomePage isInstalled={isInstalled} params={params} firstTime={firstTime}/>
+              <HomePage isLoading={isLoading} isInstalled={isInstalled} params={params} firstTime={firstTime}/>
             // </ProtectedRoute>
           }
         />
