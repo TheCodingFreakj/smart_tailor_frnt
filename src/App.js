@@ -6,7 +6,7 @@ import axios from "axios"
 function App() {
 const [data, setData] = React.useState("")
 
-axios.get('https://smarttailor.onrender.com').then(response => {
+axios.get('https://smarttailor.onrender.com/').then(response => {
     setData(response.data);
 });
   return (
