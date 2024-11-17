@@ -10,7 +10,7 @@ function App() {
       <Routes>
            {/* Define the /error route with the ErrorPage component */}
            <Route path="/error" element={<ErrorPage />} />
-<Route path="" element={<HomePage />} />
+<Route path="/dashboard" element={<HomePage />} />
       
       </Routes>
     </Router>
