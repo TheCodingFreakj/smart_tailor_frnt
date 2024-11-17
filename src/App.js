@@ -15,8 +15,6 @@ function App() {
 
 
  React.useEffect(()=>{
-
-
   if (params.has("shop") && shopDomain) {
     console.log(`Shop parameter exists: ${shopDomain}`);
     const response = checkInstallation(shopDomain);
@@ -39,9 +37,9 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute isInstalled={isInstalled} params={params} firstTime={firstTime}>
-              <HomePage />
-            </ProtectedRoute>
+            // <ProtectedRoute isInstalled={isInstalled} params={params} firstTime={firstTime}>
+              <HomePage isInstalled={isInstalled} params={params} firstTime={firstTime}/>
+            // </ProtectedRoute>
           }
         />
 

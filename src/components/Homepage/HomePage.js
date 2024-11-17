@@ -2,16 +2,27 @@ import logo from '../../logo.svg';
 import '../../App.css';
 import React, { Fragment } from "react"
 import axios from "axios"
+import { useNavigate } from 'react-router-dom';
 
 
-function HomePage() {
+function HomePage({isInstalled, params,firstTime}) {
+
+
+  const navigate = useNavigate();
+
+
+if(!params.has("shop")){
+    navigate("/error")
+}else if(!isInstalled){
+    navigate("/error")
+}
   const [data, setData] = React.useState("")
   React.useEffect(() => {
 
     axios.get('https://smart-tailor.onrender.com').then(response => {
       console.log(response)
       setData(response.data);
-    }, []);
+    }, [isInstalled]);
   })
   return (
   <Fragment>
