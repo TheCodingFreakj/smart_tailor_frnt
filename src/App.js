@@ -5,44 +5,47 @@ import HomePage from './components/Homepage/HomePage';
 import ProtectedRoute from "./utils/ProtectedRoute";
 
 function App() {
-  const [shopDomain, setShopDomain] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isInstalled, setIsInstalled] = useState(false);
+  const shopDomain = new URLSearchParams(window.location.search).get("shop");
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const domain = new URLSearchParams(window.location.search).get("shop");
-    setShopDomain(domain);
-
-    // Simulate API check or processing if needed
-    const validateShop = async () => {
-      if (!domain) {
-        navigate('/error'); // Redirect to error page if shopDomain is missing
+    const verifyInstallation = async () => {
+      const isInstalledVar = await checkInstallation(shopDomain);
+      if (!isInstalled) {
+        navigate("/error");
       }
-      setLoading(false);
+
+      setIsInstalled(isInstalledVar)
     };
 
-    validateShop();
-  }, [navigate]);
+    if (shopDomain != null) {
+      verifyInstallation();
 
-  if (loading) {
-    // Show a loading spinner while processing
-    return <div>Loading...</div>;
-  }
+    }else{
+      navigate("/error");
+    }
+
+
+  }, [shopDomain, navigate]);
+
+
 
   return (
     <Router>
       <Routes>
         {/* Define the /error route with the ErrorPage component */}
         <Route path="/error" element={<ErrorPage />} />
-
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute shopDomain={shopDomain}>
+            <ProtectedRoute isInstalled={isInstalled}>
               <HomePage />
             </ProtectedRoute>
           }
         />
+
       </Routes>
     </Router>
   );

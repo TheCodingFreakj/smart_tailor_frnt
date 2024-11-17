@@ -1,27 +1,14 @@
-import  { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { checkInstallation } from "./api";
+import React from 'react';
+import { Navigate } from 'react-router-dom';
 
-const ProtectedRoute = ({ children, shopDomain }) => {
-  const navigate = useNavigate();
+const ProtectedRoute = ({ isInstalled, children }) => {
+  if (!isInstalled) {
+    // Redirect to /error if not installed
+    return <Navigate to="/error" />;
+  }
 
-  useEffect(() => {
-    const verifyInstallation = async () => {
-      const isInstalled = await checkInstallation(shopDomain);
-      if (!isInstalled) {
-        navigate("/error");
-      }
-    };
-
-    if (shopDomain != null){
-        verifyInstallation();
-
-    }
-
-    
-  }, [shopDomain, navigate]);
-
-  return children; // Render the protected component if installed
+  // Render the child component if installed
+  return children;
 };
 
 export default ProtectedRoute;
