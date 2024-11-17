@@ -4,11 +4,15 @@ import React from "react"
 import axios from "axios"
 
 function App() {
-const [data, setData] = React.useState("")
+  const [data, setData] = React.useState("")
 
-axios.get('https://smarttailor.onrender.com/').then(response => {
-    setData(response.data);
-});
+  React.useEffect(() => {
+
+    axios.get('https://smart-tailor.onrender.com').then(response => {
+      console.log(response)
+      setData(response.data);
+    }, []);
+  })
   return (
     <div className="App">
       <header className="App-header">
