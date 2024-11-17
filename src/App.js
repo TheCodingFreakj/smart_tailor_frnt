@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-route
 import ErrorPage from './components/ErrorPage';
 import HomePage from './components/Homepage/HomePage';
 import ProtectedRoute from "./utils/ProtectedRoute";
+import { checkInstallation } from './utils/api';
 
 function App() {
   const [isInstalled, setIsInstalled] = useState(false);
