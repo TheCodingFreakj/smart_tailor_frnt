@@ -1,40 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
-import React, { Fragment } from "react"
-import axios from "axios"
 
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ErrorPage from './components/ErrorPage';
+import HomePage from './components/Homepage/HomePage';
 
 function App() {
-  const [data, setData] = React.useState("")
-  React.useEffect(() => {
-
-    axios.get('https://smart-tailor.onrender.com').then(response => {
-      console.log(response)
-      setData(response.data);
-    }, []);
-  })
   return (
-  <Fragment>
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {data}
-          </a>
-        </header>
-      </div>
-
-  </Fragment>
-
-   
+    <Router>
+      <Routes>
+           {/* Define the /error route with the ErrorPage component */}
+           <Route path="/error" element={<ErrorPage />} />
+<Route path="" element={<HomePage />} />
+      
+      </Routes>
+    </Router>
   );
 }
 
