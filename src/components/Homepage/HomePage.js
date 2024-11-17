@@ -5,7 +5,7 @@ import axios from "axios"
 import { useNavigate } from 'react-router-dom';
 
 
-function HomePage({isInstalled, params,firstTime}) {
+function HomePage({isInstalled,isLoading, params,firstTime}) {
   const [data, setData] = React.useState("")
   React.useEffect(() => {
 
