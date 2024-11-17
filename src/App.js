@@ -1,8 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ErrorPage from './components/ErrorPage';
 import HomePage from './components/Homepage/HomePage';
-import ProtectedRoute from "./utils/ProtectedRoute";
 import { checkInstallation } from './utils/api';
 
 function App() {
@@ -14,17 +13,17 @@ function App() {
   console.log(params.has("shop"))
 
 
- React.useEffect(()=>{
-  if (params.has("shop") && shopDomain) {
-    console.log(`Shop parameter exists: ${shopDomain}`);
-    const response = checkInstallation(shopDomain);
-    setIsInstalled(response.is_installed)
-    setFirstTime(response.first_time)
-    setIsLoading(false)
-  } else {
-    setIsLoading(true)
-  }
- },[])
+  React.useEffect(() => {
+    if (params.has("shop") && shopDomain) {
+      console.log(`Shop parameter exists: ${shopDomain}`);
+      const response = checkInstallation(shopDomain);
+      setIsInstalled(response.is_installed)
+      setFirstTime(response.first_time)
+      setIsLoading(false)
+    } else {
+      setIsLoading(true)
+    }
+  }, [])
 
 
 
@@ -36,9 +35,9 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            // <ProtectedRoute isInstalled={isInstalled} params={params} firstTime={firstTime}>
-              <HomePage isLoading={isLoading} isInstalled={isInstalled} params={params} firstTime={firstTime}/>
-            // </ProtectedRoute>
+
+            <HomePage isLoading={isLoading} isInstalled={isInstalled} params={params} firstTime={firstTime} />
+
           }
         />
 

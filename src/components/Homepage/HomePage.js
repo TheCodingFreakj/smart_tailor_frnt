@@ -2,7 +2,7 @@ import logo from '../../logo.svg';
 import '../../App.css';
 import React, { Fragment } from "react"
 import axios from "axios"
-import { useNavigate } from 'react-router-dom';
+
 
 
 function HomePage({isInstalled,isLoading, params,firstTime}) {
