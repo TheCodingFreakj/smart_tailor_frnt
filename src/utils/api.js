@@ -1,12 +1,29 @@
+
+
+
 import axios from "axios";
 
 export const checkInstallation = async (shopDomain) => {
+  
+
+  if (!shopDomain) {
+    console.error("Shop parameter is missing in the URL.");
+    return;
+  }
+
   try {
-    const response = await axios.get(`https://smart-tailor.onrender.com/check-installation/`, {
-      params: { shop: shopDomain },
-    });
-    return response.data.installed;
+    const response = await axios.post(
+      "https://smart-tailor.onrender.com/check-installation/", // URL of your Django API
+      { shop: shopDomain }, // Send shop as JSON body
+      { headers: { "Content-Type": "application/json" } } // Ensure JSON header
+    );
+
+    if (!response.data.installed) {
+      window.location.href = "/error";
+    }
   } catch (error) {
-    return false; // Default to false if the API call fails
+    console.error("API call failed:", error.response?.data || error.message);
   }
 };
+
+

@@ -8,6 +8,7 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 function App() {
 
   const shopDomain = new URLSearchParams(window.location.search).get("shop");
+  console.log(shopDomain)
   return (
     <Router>
       <Routes>
