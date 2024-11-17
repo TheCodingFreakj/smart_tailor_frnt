@@ -8,12 +8,6 @@ import axios from "axios";
 
 export const checkInstallation = async (shopDomain) => {
   
-
-  if (!shopDomain) {
-    console.error("Shop parameter is missing in the URL.");
-    return;
-  }
-
   try {
     const response = await axios.post(
       "https://smart-tailor.onrender.com/check-installation/", // URL of your Django API

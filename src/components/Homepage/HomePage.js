@@ -6,16 +6,6 @@ import { useNavigate } from 'react-router-dom';
 
 
 function HomePage({isInstalled, params,firstTime}) {
-
-
-  const navigate = useNavigate();
-
-
-if(!params.has("shop")){
-    navigate("/error")
-}else if(!isInstalled){
-    navigate("/error")
-}
   const [data, setData] = React.useState("")
   React.useEffect(() => {
 
