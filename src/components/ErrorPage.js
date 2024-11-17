@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import './ErrorPage.css'; // Optional: Add styles for the page
 
 const ErrorPage = () => {

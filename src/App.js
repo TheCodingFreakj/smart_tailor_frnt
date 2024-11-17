@@ -3,36 +3,9 @@ import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-route
 import ErrorPage from './components/ErrorPage';
 import HomePage from './components/Homepage/HomePage';
 import ProtectedRoute from "./utils/ProtectedRoute";
-import { checkInstallation } from './utils/api';
+
 
 function App() {
-  const [isInstalled, setIsInstalled] = useState(false);
-  const shopDomain = new URLSearchParams(window.location.search).get("shop");
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const verifyInstallation = async () => {
-      const isInstalledVar = await checkInstallation(shopDomain);
-      if (!isInstalled) {
-        navigate("/error");
-      }
-
-      setIsInstalled(isInstalledVar)
-    };
-
-    if (shopDomain != null) {
-      verifyInstallation();
-
-    }else{
-      navigate("/error");
-    }
-
-
-  }, [shopDomain, navigate]);
-
-
-
   return (
     <Router>
       <Routes>
@@ -41,7 +14,7 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute isInstalled={isInstalled}>
+            <ProtectedRoute>
               <HomePage />
             </ProtectedRoute>
           }
