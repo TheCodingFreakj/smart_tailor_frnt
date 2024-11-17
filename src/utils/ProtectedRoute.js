@@ -13,7 +13,12 @@ const ProtectedRoute = ({ children, shopDomain }) => {
       }
     };
 
-    verifyInstallation();
+    if (shopDomain != null){
+        verifyInstallation();
+
+    }
+
+    
   }, [shopDomain, navigate]);
 
   return children; // Render the protected component if installed
