@@ -1,6 +1,9 @@
 
 
 
+
+
+
 import axios from "axios";
 
 export const checkInstallation = async (shopDomain) => {
@@ -18,12 +21,8 @@ export const checkInstallation = async (shopDomain) => {
       { headers: { "Content-Type": "application/json" } } // Ensure JSON header
     );
 
-    if (!response.data.installed) {
-      window.location.href = "/error";
-    }
+    return response.data.installed
   } catch (error) {
     console.error("API call failed:", error.response?.data || error.message);
   }
 };
-
-
