@@ -8,16 +8,17 @@ function App() {
   const [isInstalled, setIsInstalled] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
   const [firstTime, setFirstTime] = React.useState(true);
+  const [shop, setShop]= React.useState('')
   const params = new URLSearchParams(window.location.search);
   const shopDomain = params.get("shop");
 
   React.useEffect(() => {
-    if (shopDomain) {
-      console.log(`Shop parameter exists: ${shopDomain}`);
+      console.log(`Shop parameter exists: ${shop}`);
       checkInstallation(shopDomain)
         .then((response) => {
           setIsInstalled(response.installed);
           setFirstTime(response.first_time);
+          setShop(response.shop_name)
         })
         .catch((error) => {
           console.error("Error checking installation:", error);
@@ -25,20 +26,15 @@ function App() {
         .finally(() => {
           setIsLoading(false);
         });
-    } else {
-      setIsLoading(false);
-    }
-  }, [shopDomain]);
+    
+  }, []);
 
   if (isLoading) {
     // Optionally render a loader while waiting for the shop check
     return <div>Loading...</div>;
   }
 
-  if (!shopDomain) {
-    // Redirect to an error page if the shop parameter is missing
-    return <ErrorPage />;
-  }
+
 
   return (
     <Router>
