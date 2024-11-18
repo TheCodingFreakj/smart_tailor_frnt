@@ -5,7 +5,7 @@ import axios from "axios"
 
 
 
-function HomePage({isInstalled,isLoading, params,firstTime}) {
+function HomePage({isInstalled,isLoading,firstTime}) {
   const [data, setData] = React.useState("")
   React.useEffect(() => {
 
