@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ErrorPage from './components/ErrorPage';
 import HomePage from './components/Homepage/HomePage';
 import { checkInstallation } from './utils/api';
-
+import { useParams } from "react-router-dom";
 function App() {
   const [isInstalled, setIsInstalled] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
