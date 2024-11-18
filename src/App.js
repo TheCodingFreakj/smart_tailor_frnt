@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ErrorPage from './components/ErrorPage';
 import HomePage from './components/Homepage/HomePage';
 import { checkInstallation } from './utils/api';
-
+import { useLocation } from 'react-router-dom';
 function App() {
   const [isInstalled, setIsInstalled] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -11,11 +11,22 @@ function App() {
   const [shop, setShop]= React.useState('')
   const [error, setError]= React.useState(false)
 
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const shopParams = params.get('shop');
+
+  console.log('Shop parameter:', shopParams);
+
+  if(shopParams){
+    localStorage.setItem("shopParams", shopParams)
+    setShop(localStorage.getItem("shopParams"))
+  }
+
   React.useEffect(() => {
 
 
       console.log(`Shop parameter exists: ${shop}`);
-      checkInstallation(shop)
+      checkInstallation(localStorage.getItem("shopParams"))
         .then((response) => {
           if(response == undefined){
             setError(true)
