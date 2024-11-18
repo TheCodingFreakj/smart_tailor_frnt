@@ -11,6 +11,13 @@ function App() {
   const [accessToken, setAccessToken]= React.useState('')
   const [error, setError]= React.useState(false)
 
+
+  const params = new URLSearchParams(window.location.search);
+    const shop = params.get('shop');  // Shopify shop name
+    const hmac = params.get('hmac');  // Shopify HMAC
+
+    console.log(hmac,shop)
+
  
     // Get the pathname from the window's location
     const pathname = window.location.pathname; // e.g., /dashboard/smarttailor324.myshopify.com
