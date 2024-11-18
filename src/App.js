@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ErrorPage from './components/ErrorPage';
 import HomePage from './components/Homepage/HomePage';
 import { checkInstallation } from './utils/api';
-import { useParams } from "react-router-dom";
+
 function App() {
   const [isInstalled, setIsInstalled] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -11,7 +11,12 @@ function App() {
   const [shopParamss, setShop]= React.useState('')
   const [error, setError]= React.useState(false)
 
-  const { shop } = useParams();
+ 
+  const getLocation = (location)=>{
+    setShop(location)
+  }
+  const pathname = shopParamss.pathname;
+  const shop = pathname?.split("/").pop();
 
   console.log('Shop parameter:', shop);
 
@@ -41,7 +46,7 @@ function App() {
           setIsLoading(false);
         });
     
-  }, [shopParamss]);
+  }, [shop]);
   if (error == true) {
     return <ErrorPage />;
   }
@@ -67,6 +72,7 @@ function App() {
               isLoading={isLoading}
               isInstalled={isInstalled}
               firstTime={firstTime}
+              getLocation={getLocation}
             />
           }
         />
