@@ -10,45 +10,57 @@ function App() {
   const [firstTime, setFirstTime] = React.useState(true);
   const params = new URLSearchParams(window.location.search);
   const shopDomain = params.get("shop");
-  console.log(params.has("shop"))
-
 
   React.useEffect(() => {
-    if (params.has("shop") && shopDomain) {
+    if (shopDomain) {
       console.log(`Shop parameter exists: ${shopDomain}`);
-      const response = checkInstallation(shopDomain);
-      setIsInstalled(response.is_installed)
-      setFirstTime(response.first_time)
-      setIsLoading(false)
+      checkInstallation(shopDomain)
+        .then((response) => {
+          setIsInstalled(response.installed);
+          setFirstTime(response.first_time);
+        })
+        .catch((error) => {
+          console.error("Error checking installation:", error);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     } else {
-      setIsLoading(true)
+      setIsLoading(false);
     }
-  }, [])
+  }, [shopDomain]);
 
+  if (isLoading) {
+    // Optionally render a loader while waiting for the shop check
+    return <div>Loading...</div>;
+  }
 
+  if (!shopDomain) {
+    // Redirect to an error page if the shop parameter is missing
+    return <ErrorPage />;
+  }
 
   return (
-
     <Router>
       <Routes>
         <Route path="/error" element={<ErrorPage />} />
         <Route
           path="/dashboard"
           element={
-
-            <HomePage isLoading={isLoading} isInstalled={isInstalled} params={params} firstTime={firstTime} />
-
+            <HomePage
+              isLoading={isLoading}
+              isInstalled={isInstalled}
+              params={params}
+              firstTime={firstTime}
+            />
           }
         />
-
       </Routes>
     </Router>
-
-  )
-
-
+  );
 }
 
 export default App;
+
 
 
