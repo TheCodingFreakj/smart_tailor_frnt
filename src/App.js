@@ -26,25 +26,31 @@ function App() {
       console.log(`Shop parameter exists: ${shopId}`);
 
       if(shopId){
-        localStorage.setItem("shopParams", shopId)
-       
-      }
-      checkInstallation(localStorage.getItem("shopParams"))
-        .then((response) => {
-          if(response == undefined){
+
+        if(shopId){
+          localStorage.setItem("shopParams", shopId)
+         
+        }
+        checkInstallation(localStorage.getItem("shopParams"))
+          .then((response) => {
+            if(response == undefined){
+              setError(true)
+            }
+            setIsInstalled(response.installed);
+            setFirstTime(response.first_time);
+            setAccessToken(response.access_token)
+          })
+          .catch((error) => {
             setError(true)
-          }
-          setIsInstalled(response.installed);
-          setFirstTime(response.first_time);
-          setAccessToken(response.access_token)
-        })
-        .catch((error) => {
-          setError(true)
-          console.error("Error checking installation:", error);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+            console.error("Error checking installation:", error);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+
+      }
+
+
     
   }, []);
   if (error == true) {
