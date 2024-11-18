@@ -2,14 +2,12 @@ import logo from '../../logo.svg';
 import '../../App.css';
 import React, { Fragment } from "react"
 import axios from "axios"
-import { useLocation  } from "react-router-dom";
 
 
 
-function HomePage({isInstalled,isLoading,getLocation}) {
+
+function HomePage({isInstalled,isLoading}) {
   const [data, setData] = React.useState("")
-  const location = useLocation()
-  getLocation(location)
   React.useEffect(() => {
 
     axios.get('https://smart-tailor.onrender.com').then(response => {

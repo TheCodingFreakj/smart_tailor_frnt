@@ -8,27 +8,27 @@ function App() {
   const [isInstalled, setIsInstalled] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
   const [firstTime, setFirstTime] = React.useState(true);
-  const [shopParamss, setShop]= React.useState('')
+  const [accessToken, setAccessToken]= React.useState('')
   const [error, setError]= React.useState(false)
 
  
-  const getLocation = (location)=>{
-    setShop(location)
-  }
-  const pathname = shopParamss.pathname;
-  const shop = pathname?.split("/").pop();
+    // Get the pathname from the window's location
+    const pathname = window.location.pathname; // e.g., /dashboard/smarttailor324.myshopify.com
 
-  console.log('Shop parameter:', shop);
+    // Split the pathname and extract the shop value
+    const segments = pathname.split("/");
+    const shopId = segments.length > 2 ? segments[2] : null;
 
-  if(shop){
-    localStorage.setItem("shopParams", shop)
-    setShop(localStorage.getItem("shopParams"))
-  }
+
 
   React.useEffect(() => {
+    
+      console.log(`Shop parameter exists: ${shopId}`);
 
-
-      console.log(`Shop parameter exists: ${shop}`);
+      if(shopId){
+        localStorage.setItem("shopParams", shopId)
+       
+      }
       checkInstallation(localStorage.getItem("shopParams"))
         .then((response) => {
           if(response == undefined){
@@ -36,7 +36,7 @@ function App() {
           }
           setIsInstalled(response.installed);
           setFirstTime(response.first_time);
-          setShop(response.shop_name)
+          setAccessToken(response.access_token)
         })
         .catch((error) => {
           setError(true)
@@ -46,8 +46,12 @@ function App() {
           setIsLoading(false);
         });
     
-  }, [shop]);
+  }, []);
   if (error == true) {
+    return <ErrorPage />;
+  }
+
+  if(accessToken == ""){
     return <ErrorPage />;
   }
   if (isLoading) {
@@ -66,13 +70,13 @@ function App() {
       <Routes>
         <Route path="/error" element={<ErrorPage />} />
         <Route
-          path="/dashboard/:shop"
+          path="/dashboard/:id"
           element={
             <HomePage
               isLoading={isLoading}
               isInstalled={isInstalled}
               firstTime={firstTime}
-              getLocation={getLocation}
+             
             />
           }
         />
