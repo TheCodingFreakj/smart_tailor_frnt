@@ -19,7 +19,7 @@ function HomePage({isInstalled,isLoading,firstTime}) {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
+  React.useEffect(() => {
       // Retrieve 'shop' from the current query string or another source
       const params = new URLSearchParams(window.location.search);
       const shop = params.get('shop') || "example.myshopify.com"; // Replace with a default or fallback shop
