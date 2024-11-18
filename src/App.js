@@ -8,16 +8,15 @@ function App() {
   const [isInstalled, setIsInstalled] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
   const [firstTime, setFirstTime] = React.useState(true);
-  const [shop, setShop]= React.useState('')
+  const [shopParamss, setShop]= React.useState('')
   const [error, setError]= React.useState(false)
 
-  const params = new URLSearchParams(window.location.search);
-  const shopParams = params.get('shop');
+  const { shop } = useParams();
 
-  console.log('Shop parameter:', shopParams);
+  console.log('Shop parameter:', shop);
 
-  if(shopParams){
-    localStorage.setItem("shopParams", shopParams)
+  if(shop){
+    localStorage.setItem("shopParams", shop)
     setShop(localStorage.getItem("shopParams"))
   }
 
@@ -42,7 +41,7 @@ function App() {
           setIsLoading(false);
         });
     
-  }, [shop]);
+  }, [shopParamss]);
   if (error == true) {
     return <ErrorPage />;
   }
@@ -62,7 +61,7 @@ function App() {
       <Routes>
         <Route path="/error" element={<ErrorPage />} />
         <Route
-          path="/dashboard"
+          path="/dashboard/:shop"
           element={
             <HomePage
               isLoading={isLoading}
