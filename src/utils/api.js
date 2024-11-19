@@ -6,7 +6,7 @@
 
 import axios from "axios";
 
-export const checkInstallation = async (shopDomain) => {
+export const checkInstallation = async (shopDomain,code) => {
   // https://smart-tailor.onrender.com/check-installation/
   try {
     const response = await axios.post(
