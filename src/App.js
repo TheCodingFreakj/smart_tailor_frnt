@@ -5,7 +5,7 @@ import HomePage from './components/Homepage/HomePage';
 import { checkInstallation } from './utils/api';
 import createApp from '@shopify/app-bridge';
 import { getSessionToken } from '@shopify/app-bridge-utils';
-function App() {
+function App({app}) {
   const [isInstalled, setIsInstalled] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
   const [firstTime, setFirstTime] = React.useState(true);
@@ -24,10 +24,7 @@ function App() {
     const shopId = segments.length > 3 ? segments[3] : null;
     const shop = segments.length > 3 ? segments[2] : null;
 
-    const app = createApp({
-      apiKey: '530d52c7835d1190d3fb162eaaf12cf8',
-      shopOrigin: shop,
-    });
+   
 
     const token =  getSessionToken(app);
     
