@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ErrorPage from './components/ErrorPage';
 import HomePage from './components/Homepage/HomePage';
 import { checkInstallation } from './utils/api';
-
+import createApp from '@shopify/app-bridge';
+import { getSessionToken } from '@shopify/app-bridge-utils';
 function App() {
   const [isInstalled, setIsInstalled] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -21,9 +22,15 @@ function App() {
     // Split the pathname and extract the shop value
     const segments = pathname.split("/");
     const shopId = segments.length > 3 ? segments[3] : null;
-    const code = segments.length > 3 ? segments[2] : null;
+    const shop = segments.length > 3 ? segments[2] : null;
 
+    const app = createApp({
+      apiKey: 'your_api_key',
+      shopOrigin: shop,
+    });
 
+    const token =  getSessionToken(app);
+    
 
   React.useEffect(() => {
     
@@ -35,7 +42,7 @@ function App() {
           localStorage.setItem("shopParams", shopId)
          
         }
-        checkInstallation(localStorage.getItem("shopParams"), code)
+        checkInstallation(localStorage.getItem("shopParams"),token)
           .then((response) => {
             console.log(response)
             if(response == undefined){
@@ -81,7 +88,7 @@ function App() {
       <Routes>
         <Route path="/error" element={<ErrorPage />} />
         <Route
-          path="/dashboard/:code/:id"
+          path="/dashboard/:shop/:id"
           element={
             <HomePage
               isLoading={isLoading}
