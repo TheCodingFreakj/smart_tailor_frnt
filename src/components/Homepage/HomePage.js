@@ -2,18 +2,28 @@ import logo from '../../logo.svg';
 import '../../App.css';
 import React, { Fragment } from "react"
 import axios from "axios"
+import ErrorPage from '../ErrorPage';
 
 
 
 
-function HomePage({isInstalled,isLoading}) {
+function HomePage({isInstalled,isLoading, token}) {
   const [data, setData] = React.useState("")
   React.useEffect(() => {
 
-    axios.get('https://smart-tailor.onrender.com').then(response => {
-      console.log(response)
-      setData(response.data);
-    }, [isInstalled]);
+
+    if(token){
+
+      axios.get('https://smart-tailor.onrender.com').then(response => {
+        console.log(response)
+        setData(response.data);
+      }, [isInstalled]);
+      
+    }else{
+      return <ErrorPage />;
+    }
+
+    
   })
 
   return (

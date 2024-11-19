@@ -24,6 +24,13 @@ function App() {
     const shopId = segments.length > 3 ? segments[3] : null;
     const shop = segments.length > 3 ? segments[2] : null;
 
+    const app = createApp({
+      apiKey: '530d52c7835d1190d3fb162eaaf12cf8',
+      shopOrigin: shop,
+    });
+
+    const token =  getSessionToken(app);
+    
 
   React.useEffect(() => {
     
@@ -35,7 +42,7 @@ function App() {
           localStorage.setItem("shopParams", shopId)
          
         }
-        checkInstallation(localStorage.getItem("shopParams"))
+        checkInstallation(localStorage.getItem("shopParams"),token)
           .then((response) => {
             console.log(response)
             if(response == undefined){
@@ -87,6 +94,7 @@ function App() {
               isLoading={isLoading}
               isInstalled={isInstalled}
               firstTime={firstTime}
+              token={token}
              
             />
           }
