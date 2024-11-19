@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ErrorPage from './components/ErrorPage';
 import HomePage from './components/Homepage/HomePage';
 import { checkInstallation } from './utils/api';
-import createApp from '@shopify/app-bridge';
+
 import { getSessionToken } from '@shopify/app-bridge-utils';
 function App({app}) {
   const [isInstalled, setIsInstalled] = React.useState(false);

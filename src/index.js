@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import createApp from '@shopify/app-bridge';
 const urlParams = new URLSearchParams(window.location.search);
 console.log(window.location.search)
 const host = urlParams.get('host');
