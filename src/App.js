@@ -24,13 +24,6 @@ function App() {
     const shopId = segments.length > 3 ? segments[3] : null;
     const shop = segments.length > 3 ? segments[2] : null;
 
-    const app = createApp({
-      apiKey: 'your_api_key',
-      shopOrigin: shop,
-    });
-
-    const token =  getSessionToken(app);
-    
 
   React.useEffect(() => {
     
@@ -42,7 +35,7 @@ function App() {
           localStorage.setItem("shopParams", shopId)
          
         }
-        checkInstallation(localStorage.getItem("shopParams"),token)
+        checkInstallation(localStorage.getItem("shopParams"))
           .then((response) => {
             console.log(response)
             if(response == undefined){
