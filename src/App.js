@@ -90,7 +90,7 @@ function App() {
               isLoading={isLoading}
               isInstalled={isInstalled}
               firstTime={firstTime}
-              token={token}
+             
              
             />
           }
