@@ -7,11 +7,11 @@
 import axios from "axios";
 
 export const checkInstallation = async (shopDomain) => {
-  
+  // https://smart-tailor.onrender.com/check-installation/
   try {
     const response = await axios.post(
       "https://smart-tailor.onrender.com/check-installation/", // URL of your Django API
-      { shop: shopDomain }, // Send shop as JSON body
+      { shop: shopDomain, code:code }, // Send shop as JSON body
       { headers: { "Content-Type": "application/json" } } // Ensure JSON header
     );
 

@@ -12,11 +12,7 @@ function App() {
   const [error, setError]= React.useState(false)
 
 
-  const params = new URLSearchParams(window.location.search);
-    const shop = params.get('shop');  // Shopify shop name
-    const hmac = params.get('hmac');  // Shopify HMAC
 
-    console.log(hmac,shop)
 
  
     // Get the pathname from the window's location
@@ -24,7 +20,8 @@ function App() {
 
     // Split the pathname and extract the shop value
     const segments = pathname.split("/");
-    const shopId = segments.length > 2 ? segments[2] : null;
+    const shopId = segments.length > 3 ? segments[3] : null;
+    const code = segments.length > 3 ? segments[2] : null;
 
 
 
@@ -38,8 +35,9 @@ function App() {
           localStorage.setItem("shopParams", shopId)
          
         }
-        checkInstallation(localStorage.getItem("shopParams"))
+        checkInstallation(localStorage.getItem("shopParams"), code)
           .then((response) => {
+            console.log(response)
             if(response == undefined){
               setError(true)
             }
@@ -83,7 +81,7 @@ function App() {
       <Routes>
         <Route path="/error" element={<ErrorPage />} />
         <Route
-          path="/dashboard/:id"
+          path="/dashboard/:code/:id"
           element={
             <HomePage
               isLoading={isLoading}
