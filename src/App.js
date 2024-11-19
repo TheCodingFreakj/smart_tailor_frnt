@@ -4,8 +4,7 @@ import ErrorPage from './components/ErrorPage';
 import HomePage from './components/Homepage/HomePage';
 import { checkInstallation } from './utils/api';
 
-import { getSessionToken } from '@shopify/app-bridge-utils';
-function App({app}) {
+function App() {
   const [isInstalled, setIsInstalled] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
   const [firstTime, setFirstTime] = React.useState(true);
@@ -26,7 +25,7 @@ function App({app}) {
 
    
 
-    const token =  getSessionToken(app);
+   
     
 
   React.useEffect(() => {
@@ -39,7 +38,7 @@ function App({app}) {
           localStorage.setItem("shopParams", shopId)
          
         }
-        checkInstallation(localStorage.getItem("shopParams"),token)
+        checkInstallation(localStorage.getItem("shopParams"))
           .then((response) => {
             console.log(response)
             if(response == undefined){
