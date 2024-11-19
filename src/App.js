@@ -24,7 +24,16 @@ function App() {
     const shop = segments.length > 3 ? segments[2] : null;
 
    
-
+// Wait for the page to fully load before accessing performance data
+window.onload = () => {
+  // Get all resources (including network calls)
+  const resources = performance.getEntriesByType('resource');
+  
+  // Log the URLs of all resource calls
+  resources.forEach((resource) => {
+    console.log('Resource URL:', resource.name);
+  });
+};
    
     
 
