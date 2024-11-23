@@ -37,7 +37,7 @@ const fetchData = async (shopId)=>{
       { headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken }} // Ensure JSON header
     );
 
-    setData(response.data.shop);
+    setData(response.data.shop_details.shop);
   } catch (error) {
     console.error("API call failed:", error.response?.data || error.message);
   }

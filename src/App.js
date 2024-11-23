@@ -31,23 +31,6 @@ function App() {
       
     }
    
-
-
-// Request Interceptor: This will run before the request is sent
-axios.interceptors.request.use((request) => {
-  console.log('Request URL:', request.url);  // Log the URL of the request
-  console.log('Request Method:', request.method);  // Log the HTTP method (GET, POST, etc.)
-  console.log('Request Headers:', request.headers);  // Log the request headers
-  console.log('Request Body:', request.data);  // Log the request body (for POST requests)
-  
-  // You can modify the request here if needed before sending it
-  return request;
-}, (error) => {
-  // Handle error before the request is sent
-  console.error('Request Error:', error);
-  return Promise.reject(error);
-});
-
   React.useEffect(() => {
     
       console.log(`Shop parameter exists: ${shopId}`);
