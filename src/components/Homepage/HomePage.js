@@ -18,7 +18,7 @@ React.useEffect( () => {
 
 const fetchData = async (shopId)=>{
   try {
-    const response = await axios.get(
+    const response = await axios.post(
       "https://smart-tailor.onrender.com/dashboard/", // URL of your Django API
        { shopId: shopId }, // Send shop as JSON body
       { headers: { "Content-Type": "application/json" }} // Ensure JSON header
