@@ -44,9 +44,6 @@ function App() {
             if(response == undefined){
               setError(true)
             }
-            setIsInstalled(response.installed);
-            setFirstTime(response.first_time);
-            setAccessToken(response.access_token)
           })
           .catch((error) => {
             setError(true)
