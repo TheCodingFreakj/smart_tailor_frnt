@@ -4,12 +4,16 @@ import ErrorPage from './components/ErrorPage';
 import HomePage from './components/Homepage/HomePage';
 import { checkInstallation } from './utils/api';
 
+// Import Axios (ensure you have Axios installed, e.g., via npm or CDN)
+import axios from 'axios';
 function App() {
   const [isInstalled, setIsInstalled] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
   const [firstTime, setFirstTime] = React.useState(true);
   const [accessToken, setAccessToken]= React.useState('')
   const [error, setError]= React.useState(false)
+
+ 
 
 
 
@@ -24,18 +28,22 @@ function App() {
     const shop = segments.length > 3 ? segments[2] : null;
 
    
-// Wait for the page to fully load before accessing performance data
-window.onload = () => {
-  // Get all resources (including network calls)
-  const resources = performance.getEntriesByType('resource');
+
+
+// Request Interceptor: This will run before the request is sent
+axios.interceptors.request.use((request) => {
+  console.log('Request URL:', request.url);  // Log the URL of the request
+  console.log('Request Method:', request.method);  // Log the HTTP method (GET, POST, etc.)
+  console.log('Request Headers:', request.headers);  // Log the request headers
+  console.log('Request Body:', request.data);  // Log the request body (for POST requests)
   
-  // Log the URLs of all resource calls
-  resources.forEach((resource) => {
-    console.log('Resource URL:', resource.name);
-  });
-};
-   
-    
+  // You can modify the request here if needed before sending it
+  return request;
+}, (error) => {
+  // Handle error before the request is sent
+  console.error('Request Error:', error);
+  return Promise.reject(error);
+});
 
   React.useEffect(() => {
     
