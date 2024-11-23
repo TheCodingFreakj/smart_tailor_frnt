@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ErrorPage from './components/ErrorPage';
 import HomePage from './components/Homepage/HomePage';
 import { checkInstallation } from './utils/api';
-
+import {Provider, Loading} from '@shopify/app-bridge-react';
 // Import Axios (ensure you have Axios installed, e.g., via npm or CDN)
 import axios from 'axios';
 function App() {
@@ -97,7 +97,8 @@ axios.interceptors.request.use((request) => {
 
 
   return (
-    <Router>
+    <Provider config={config}>
+     <Router>
       <Routes>
         <Route path="/error" element={<ErrorPage />} />
         <Route
@@ -114,6 +115,8 @@ axios.interceptors.request.use((request) => {
         />
       </Routes>
     </Router>
+  </Provider>
+   
   );
 }
 
