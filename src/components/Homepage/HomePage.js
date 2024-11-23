@@ -3,13 +3,15 @@ import '../../App.css';
 import React, { Fragment } from "react"
 import axios from "axios"
 import ErrorPage from '../ErrorPage';
-
+import { useParams } from 'react-router-dom';
 
 
 
 
 function HomePage({isInstalled,isLoading}) {
   const [data, setData] = React.useState("")
+
+
 
 
 React.useEffect( () => {

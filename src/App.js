@@ -101,7 +101,7 @@ axios.interceptors.request.use((request) => {
       <Routes>
         <Route path="/error" element={<ErrorPage />} />
         <Route
-          path="/dashboard/:shop/:id/:hmac"
+          path="/dashboard/:shop/:id"
           element={
             <HomePage
               isLoading={isLoading}
