@@ -12,19 +12,32 @@ function HomePage({isInstalled,isLoading}) {
   const [data, setData] = React.useState("")
 
 
-
+  const getCsrfToken = async () => {
+    try {
+      const response = await axios.get("https://smart-tailor.onrender.com/csrf/", {
+        withCredentials: true, // Ensure cookies are sent
+      });
+      console.log("CSRF Token:", response.data.csrfToken);
+      return response.data.csrfToken;
+    } catch (error) {
+      console.error("Error fetching CSRF token:", error);
+    }
+  };
 
 React.useEffect( () => {
 
 const fetchData = async (shopId)=>{
+  const csrfToken = await getCsrfToken();
+
+
   try {
     const response = await axios.post(
       "https://smart-tailor.onrender.com/dashboard/", // URL of your Django API
        { shopId: shopId }, // Send shop as JSON body
-      { headers: { "Content-Type": "application/json" }} // Ensure JSON header
+      { headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken }} // Ensure JSON header
     );
 
-    setData(response.data);
+    setData(response.data.shop);
   } catch (error) {
     console.error("API call failed:", error.response?.data || error.message);
   }
@@ -49,6 +62,7 @@ fetchData(localStorage.getItem("shopParams"))
             rel="noopener noreferrer"
           >
             {data.name}
+            {data.email}
           </a>
         </header>
       </div>}
