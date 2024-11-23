@@ -26,7 +26,10 @@ function App() {
     const segments = pathname.split("/");
     const shopId = segments.length > 3 ? segments[3] : null;
     const shop = segments.length > 3 ? segments[2] : null;
-
+    if(shopId){
+        localStorage.setItem("shopParams", shopId)
+      
+    }
    
 
 
@@ -45,54 +48,51 @@ axios.interceptors.request.use((request) => {
   return Promise.reject(error);
 });
 
-  React.useEffect(() => {
+  // React.useEffect(() => {
     
-      console.log(`Shop parameter exists: ${shopId}`);
+  //     console.log(`Shop parameter exists: ${shopId}`);
 
-      if(shopId){
+  //     if(shopId){
 
-        if(shopId){
-          localStorage.setItem("shopParams", shopId)
-         
-        }
-        checkInstallation(localStorage.getItem("shopParams"))
-          .then((response) => {
-            console.log(response)
-            if(response == undefined){
-              setError(true)
-            }
-            setIsInstalled(response.installed);
-            setFirstTime(response.first_time);
-            setAccessToken(response.access_token)
-          })
-          .catch((error) => {
-            setError(true)
-            console.error("Error checking installation:", error);
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
+  
+  //       checkInstallation(localStorage.getItem("shopParams"))
+  //         .then((response) => {
+  //           console.log(response)
+  //           if(response == undefined){
+  //             setError(true)
+  //           }
+  //           setIsInstalled(response.installed);
+  //           setFirstTime(response.first_time);
+  //           setAccessToken(response.access_token)
+  //         })
+  //         .catch((error) => {
+  //           setError(true)
+  //           console.error("Error checking installation:", error);
+  //         })
+  //         .finally(() => {
+  //           setIsLoading(false);
+  //         });
 
-      }
+  //     }
 
 
     
-  }, []);
-  if (error == true) {
-    return <ErrorPage />;
-  }
+  // }, []);
+  // if (error == true) {
+  //   return <ErrorPage />;
+  // }
 
-  if(accessToken == ""){
-    return <ErrorPage />;
-  }
-  if (isLoading) {
-    // Optionally render a loader while waiting for the shop check
-    return <div>Loading...</div>;
-  }
+  // if(accessToken == ""){
+  //   return <ErrorPage />;
+  // }
+  // if (isLoading) {
+  //   // Optionally render a loader while waiting for the shop check
+  //   return <div>Loading...</div>;
+  // }
 
-  if (firstTime == false && isInstalled == false) {
-    return <ErrorPage />;
-  }
+  // if (firstTime == false && isInstalled == false) {
+  //   return <ErrorPage />;
+  // }
 
 
 

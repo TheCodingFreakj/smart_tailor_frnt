@@ -16,12 +16,12 @@ function HomePage({isInstalled,isLoading}) {
 
 React.useEffect( () => {
 
-const fetchData = async ()=>{
+const fetchData = async (shopId)=>{
   try {
     const response = await axios.get(
       "https://smart-tailor.onrender.com", // URL of your Django API
-      // { shop: shopDomain }, // Send shop as JSON body
-      // { headers: { "Content-Type": "application/json" }} // Ensure JSON header
+       { shopId: shopId }, // Send shop as JSON body
+      { headers: { "Content-Type": "application/json" }} // Ensure JSON header
     );
 
     setData(response.data);
@@ -30,7 +30,7 @@ const fetchData = async ()=>{
   }
 }
 
-fetchData()
+fetchData(localStorage.getItem("shopParams"))
 
   },[data])
 
@@ -48,7 +48,7 @@ fetchData()
             target="_blank"
             rel="noopener noreferrer"
           >
-            {data}
+            {data.name}
           </a>
         </header>
       </div>}
