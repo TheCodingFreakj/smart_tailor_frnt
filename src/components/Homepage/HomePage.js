@@ -45,7 +45,7 @@ const fetchData = async (shopId)=>{
 
 fetchData(localStorage.getItem("shopParams"))
 
-  },[data])
+  },[])
 
   return (
   <Fragment>
