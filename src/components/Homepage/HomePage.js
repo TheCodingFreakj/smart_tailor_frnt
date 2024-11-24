@@ -27,14 +27,14 @@ function HomePage({isInstalled,isLoading}) {
 React.useEffect( () => {
 
 const fetchData = async (shopId)=>{
-  const csrfToken = await getCsrfToken();
-
+  // const csrfToken = await getCsrfToken();
+// "X-CSRFToken": csrfToken 
 
   try {
     const response = await axios.post(
       "https://smart-tailor.onrender.com/dashboard/", // URL of your Django API
        { shopId: shopId }, // Send shop as JSON body
-      { headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken }} // Ensure JSON header
+      { headers: { "Content-Type": "application/json"}} // Ensure JSON header
     );
 
     setData(response.data.shop_details.shop);
