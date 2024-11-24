@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Paper, Typography, Box, Button, Grid2 } from '@mui/material';
 
 const ProductRecommendations = () => {
@@ -10,7 +10,23 @@ const ProductRecommendations = () => {
   ];
 
   return (
-    <Paper sx={{ padding: 2 }}>
+    <Fragment>
+
+    <CssBaseline />
+      <Box sx={{ display: 'flex' }}>
+        <Sidebar />
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            bgcolor: '#f5f5f5',
+            padding: '24px',
+            height: '100vh',
+            overflow: 'auto',
+          }}
+        >
+          <Container maxWidth="xl">
+          <Paper sx={{ padding: 2 }}>
       <Typography variant="h6" gutterBottom>
         Recommended Products
       </Typography>
@@ -31,6 +47,14 @@ const ProductRecommendations = () => {
         ))}
       </Grid2>
     </Paper>
+          </Container>
+        </Box>
+      </Box>
+  
+    </Fragment>
+
+
+
   );
 };
 
