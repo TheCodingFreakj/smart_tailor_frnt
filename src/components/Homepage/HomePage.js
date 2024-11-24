@@ -91,8 +91,8 @@ function HomePage({ isInstalled, isLoading, setIsLoading }) {
               </Grid2>
               <Grid2 item xs={12} md={4}>
                 {/* <ProductRecommendations /> */}
-                <InstallTrackingScriptButton/>
-<ScriptRemovalButton/> 
+                <InstallTrackingScriptButton shopId={shopId}/>
+<ScriptRemovalButton shopId={shopId} /> 
               </Grid2>
             </Grid2>
           </Container>
