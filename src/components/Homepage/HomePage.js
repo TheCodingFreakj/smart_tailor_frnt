@@ -4,7 +4,8 @@ import React, { Fragment } from "react"
 import axios from "axios"
 import ErrorPage from '../ErrorPage';
 import { useParams } from 'react-router-dom';
-
+import InstallTrackingScriptButton from '../../utils/InstallTrackingScriptButton';
+import ScriptRemovalButton from '../../utils/ScriptRemovalButton';
 
 
 
@@ -56,24 +57,10 @@ function HomePage({ isInstalled, isLoading, setIsLoading }) {
 
   return (
     <Fragment>
-      {<div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {data.name}
-            {data.email}
-          </a>
-        </header>
-      </div>}
+      {/* //Create the layout here */}
+      <InstallTrackingScriptButton/>
 
+      <ScriptRemovalButton/>
 
     </Fragment>
 
