@@ -6,7 +6,10 @@ import ErrorPage from '../ErrorPage';
 import { useParams } from 'react-router-dom';
 import InstallTrackingScriptButton from '../../utils/InstallTrackingScriptButton';
 import ScriptRemovalButton from '../../utils/ScriptRemovalButton';
-
+import { CssBaseline, Box, Grid2, Typography, Container, Paper } from '@mui/material';
+import Sidebar from './Sidebar';
+import Dashboard from './Dashboard';
+import ProductRecommendations from './ProductRecommendations';
 
 
 function HomePage({ isInstalled, isLoading, setIsLoading }) {
@@ -58,9 +61,43 @@ function HomePage({ isInstalled, isLoading, setIsLoading }) {
   return (
     <Fragment>
       {/* //Create the layout here */}
-      <InstallTrackingScriptButton/>
+      {/* <InstallTrackingScriptButton/>
 
-      <ScriptRemovalButton/>
+      <ScriptRemovalButton/> */}
+
+<>
+<InstallTrackingScriptButton/>
+<ScriptRemovalButton/> 
+
+      <CssBaseline />
+      <Box sx={{ display: 'flex' }}>
+        <Sidebar />
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            bgcolor: '#f5f5f5',
+            padding: '24px',
+            height: '100vh',
+            overflow: 'auto',
+          }}
+        >
+          <Container maxWidth="xl">
+            <Typography variant="h4" gutterBottom>
+              Admin Dashboard
+            </Typography>
+            <Grid2 container spacing={3}>
+              <Grid2 item xs={12} md={8}>
+                <Dashboard />
+              </Grid2>
+              <Grid2 item xs={12} md={4}>
+                <ProductRecommendations />
+              </Grid2>
+            </Grid2>
+          </Container>
+        </Box>
+      </Box>
+    </>
 
     </Fragment>
 
