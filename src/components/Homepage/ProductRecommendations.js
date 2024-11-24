@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Paper, Typography, Box, Button, Grid2 } from '@mui/material';
 import { CssBaseline, Container } from '@mui/material';
+import Sidebar from './Sidebar';
 const ProductRecommendations = () => {
   const products = [
     { name: 'Product 1', price: '$50', img: 'https://via.placeholder.com/150' },
