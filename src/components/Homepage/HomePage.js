@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 
 
 
-function HomePage({isInstalled,isLoading}) {
+function HomePage({ isInstalled, isLoading, setIsLoading }) {
   const [data, setData] = React.useState("")
 
 
@@ -18,38 +18,44 @@ function HomePage({isInstalled,isLoading}) {
         withCredentials: true, // Ensure cookies are sent
       });
       console.log("CSRF Token:", response.data.csrfToken);
+      setIsLoading(false)
       return response.data.csrfToken;
     } catch (error) {
+      setIsLoading(true)
       console.error("Error fetching CSRF token:", error);
     }
   };
 
-React.useEffect( () => {
+  React.useEffect(() => {
 
-const fetchData = async (shopId)=>{
-  // const csrfToken = await getCsrfToken();
-// "X-CSRFToken": csrfToken 
+    const fetchData = async (shopId) => {
+      // const csrfToken = await getCsrfToken();
+      // "X-CSRFToken": csrfToken 
 
-  try {
-    const response = await axios.post(
-      "https://smart-tailor.onrender.com/dashboard/", // URL of your Django API
-       { shopId: shopId }, // Send shop as JSON body
-      { headers: { "Content-Type": "application/json"}} // Ensure JSON header
-    );
+      try {
+        const response = await axios.post(
+          "https://smart-tailor.onrender.com/dashboard/", // URL of your Django API
+          { shopId: shopId }, // Send shop as JSON body
+          { headers: { "Content-Type": "application/json" } } // Ensure JSON header
+        );
 
-    setData(response.data.shop_details.shop);
-  } catch (error) {
-    console.error("API call failed:", error.response?.data || error.message);
+        setData(response.data.shop_details.shop);
+      } catch (error) {
+        console.error("API call failed:", error.response?.data || error.message);
+      }
+    }
+
+    fetchData(localStorage.getItem("shopParams"))
+
+  }, [])
+
+  if (isLoading == true) {
+    return <ErrorPage />;
   }
-}
-
-fetchData(localStorage.getItem("shopParams"))
-
-  },[])
 
   return (
-  <Fragment>
-    {isLoading ? <div>...Loading</div> :  <div className="App">
+    <Fragment>
+      {<div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
@@ -66,11 +72,11 @@ fetchData(localStorage.getItem("shopParams"))
           </a>
         </header>
       </div>}
-     
 
-  </Fragment>
 
-   
+    </Fragment>
+
+
   );
 }
 

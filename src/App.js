@@ -93,6 +93,7 @@ function App() {
           element={
             <HomePage
               isLoading={isLoading}
+              setIsLoading={setIsLoading}
               isInstalled={isInstalled}
               firstTime={firstTime}
              
