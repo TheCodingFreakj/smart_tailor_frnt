@@ -66,8 +66,7 @@ function HomePage({ isInstalled, isLoading, setIsLoading }) {
       <ScriptRemovalButton/> */}
 
 <>
-<InstallTrackingScriptButton/>
-<ScriptRemovalButton/> 
+
 
       <CssBaseline />
       <Box sx={{ display: 'flex' }}>
@@ -91,7 +90,9 @@ function HomePage({ isInstalled, isLoading, setIsLoading }) {
                 <Dashboard />
               </Grid2>
               <Grid2 item xs={12} md={4}>
-                <ProductRecommendations />
+                {/* <ProductRecommendations /> */}
+                <InstallTrackingScriptButton/>
+<ScriptRemovalButton/> 
               </Grid2>
             </Grid2>
           </Container>
