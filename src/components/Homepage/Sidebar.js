@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, List, ListItem, ListItemIcon, ListItemText, Drawer } from '@mui/material';
 import { Dashboard as DashboardIcon, ShoppingCart as ShoppingCartIcon, Settings as SettingsIcon } from '@mui/icons-material';
-
+import { Link } from 'react-router-dom';
 const Sidebar = () => {
   return (
     <Drawer
@@ -19,15 +19,15 @@ const Sidebar = () => {
       anchor="left"
     >
       <List>
-        <ListItem button>
+        <ListItem button component={Link} to="/analytics">
           <ListItemIcon><DashboardIcon style={{ color: 'white' }} /></ListItemIcon>
-          <ListItemText primary="Dashboard" />
+          <ListItemText primary="Analytics" />
         </ListItem>
-        <ListItem button>
+        <ListItem button component={Link} to="/recommendations">
           <ListItemIcon><ShoppingCartIcon style={{ color: 'white' }} /></ListItemIcon>
           <ListItemText primary="Recommendations" />
         </ListItem>
-        <ListItem button>
+        <ListItem button component={Link} to="/settings">
           <ListItemIcon><SettingsIcon style={{ color: 'white' }} /></ListItemIcon>
           <ListItemText primary="Settings" />
         </ListItem>

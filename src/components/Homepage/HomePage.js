@@ -60,12 +60,9 @@ function HomePage({ isInstalled, isLoading, setIsLoading }) {
 
   return (
     <Fragment>
-      {/* //Create the layout here */}
-      {/* <InstallTrackingScriptButton/>
+    
 
-      <ScriptRemovalButton/> */}
-
-<>
+     <>
 
 
       <CssBaseline />
@@ -85,14 +82,12 @@ function HomePage({ isInstalled, isLoading, setIsLoading }) {
             <Typography variant="h4" gutterBottom>
               Admin Dashboard
             </Typography>
-            <Grid2 container spacing={3}>
+            <Grid2 container spacing={6}>
               <Grid2 item xs={12} md={8}>
                 <Dashboard />
               </Grid2>
               <Grid2 item xs={12} md={4}>
-                {/* <ProductRecommendations /> */}
-                <InstallTrackingScriptButton shopId={localStorage.getItem("shopParams")}/>
-<ScriptRemovalButton shopId={localStorage.getItem("shopParams")} /> 
+                Show recent activity in this app
               </Grid2>
             </Grid2>
           </Container>
