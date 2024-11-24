@@ -31,43 +31,43 @@ function App() {
       
     }
    
-  React.useEffect(() => {
+  // React.useEffect(() => {
     
-      console.log(`Shop parameter exists: ${shopId}`);
+  //     console.log(`Shop parameter exists: ${shopId}`);
 
-      if(shopId){
+  //     if(shopId){
 
   
-        checkInstallation(localStorage.getItem("shopParams"))
-          .then((response) => {
-            console.log(response)
-            if(response == undefined){
-              setError(true)
-            }
+  //       checkInstallation(localStorage.getItem("shopParams"))
+  //         .then((response) => {
+  //           console.log(response)
+  //           if(response == undefined){
+  //             setError(true)
+  //           }
 
-            if (response.error){
-              return <ErrorPage />;
-            }
-            // setIsInstalled(response.installed);
-            // setFirstTime(response.first_time);
-            // setAccessToken(response.access_token)
-          })
-          .catch((error) => {
-            setError(true)
-            console.error("Error checking installation:", error);
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
+  //           if (response.error){
+  //             return <ErrorPage />;
+  //           }
+  //           // setIsInstalled(response.installed);
+  //           // setFirstTime(response.first_time);
+  //           // setAccessToken(response.access_token)
+  //         })
+  //         .catch((error) => {
+  //           setError(true)
+  //           console.error("Error checking installation:", error);
+  //         })
+  //         .finally(() => {
+  //           setIsLoading(false);
+  //         });
 
-      }
+  //     }
 
 
     
-  }, []);
-  if (error == true) {
-    return <ErrorPage />;
-  }
+  // }, []);
+  // if (error == true) {
+  //   return <ErrorPage />;
+  // }
 
   // if(accessToken == ""){
   //   return <ErrorPage />;
