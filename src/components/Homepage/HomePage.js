@@ -18,7 +18,7 @@ function HomePage({ isInstalled, isLoading, setIsLoading }) {
 
   const getCsrfToken = async () => {
     try {
-      const response = await axios.get("https://smart-tailor.onrender.com/csrf/", {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/csrf/`, {
         withCredentials: true, // Ensure cookies are sent
       });
       console.log("CSRF Token:", response.data.csrfToken);
@@ -38,7 +38,7 @@ function HomePage({ isInstalled, isLoading, setIsLoading }) {
 
       try {
         const response = await axios.post(
-          "https://smart-tailor.onrender.com/dashboard/", // URL of your Django API
+          `${process.env.REACT_APP_API_URL}/dashboard/`, // URL of your Django API
           { shopId: shopId }, // Send shop as JSON body
           { headers: { "Content-Type": "application/json" } } // Ensure JSON header
         );

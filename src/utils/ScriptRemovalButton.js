@@ -18,8 +18,8 @@ class ScriptRemovalButton extends Component {
 
     try {
       const response = await axios.post(
-        "https://smart-tailor.onrender.com/shopify/product-recommendations/",  // Backend API URL
-        { shopId: shopId ,action:"remove_script"},  // Send shopId in the body of the request
+        `${process.env.REACT_APP_API_URL}/shopify/product-recommendations/`,  // Backend API URL
+        { shopId: shopId ,action:"remove_script", internal_call:true},  // Send shopId in the body of the request
         { headers: { "Content-Type": "application/json" } }
       );
 

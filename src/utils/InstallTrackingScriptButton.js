@@ -1,12 +1,12 @@
 import axios from 'axios';
 import React, { Fragment } from 'react';
-const InstallTrackingScriptButton = ({ shopId }) => {
+const InstallTrackingScriptButton = ({ addCustInfo, shopId }) => {
     const [message, setMessage] = React.useState("")
     const installScript = async () => {
         try {
             const response = await axios.post(
-                "https://smart-tailor.onrender.com/shopify/product-recommendations/", // URL of your Django API
-                { shopId: shopId, action:"install_script" }, // Send shop as JSON body
+                `${process.env.REACT_APP_API_URL}/shopify/product-recommendations/`, // URL of your Django API
+                { shopId: shopId, action: "install_script" }, // Send shop as JSON body
                 { headers: { "Content-Type": "application/json" } } // Ensure JSON header
             );
 
@@ -20,12 +20,37 @@ const InstallTrackingScriptButton = ({ shopId }) => {
         }
     };
 
+
+
+    const addCustomerCode = async () => {
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_URL}/shopify/add-customer-code/`, // URL of your Django API
+                { shopId: shopId}, // Send shop as JSON body
+                { headers: { "Content-Type": "application/json" } } // Ensure JSON header
+            );
+
+            console.log(response.data)
+            if (response.data.success) {
+                setMessage("Customer Info Installed Successfully")
+            }
+        } catch (error) {
+            console.error("Error installing script:", error);
+            setMessage("Error installing script")
+        }
+    };
+
+
     return (
 
         <Fragment>
-            <button onClick={installScript} className="btn btn-primary">
+
+            {addCustInfo ? <button onClick={addCustomerCode} className="btn btn-primary">
+                Add Customer Info
+            </button> : <button onClick={installScript} className="btn btn-primary">
                 Install Tracking Script
-            </button>
+            </button>}
+
             {message && <p>{message}</p>}
         </Fragment>
 

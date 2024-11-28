@@ -37,6 +37,11 @@ function Settings() {
               <Grid2 item xs={12} md={4}>
                 <InstallTrackingScriptButton shopId={localStorage.getItem("shopParams")}/>
                 <ScriptRemovalButton shopId={localStorage.getItem("shopParams")} /> 
+
+
+
+
+                <InstallTrackingScriptButton addCustInfo={true} shopId={localStorage.getItem("shopParams")}/>
               </Grid2>
             </Grid2>
           </Container>
