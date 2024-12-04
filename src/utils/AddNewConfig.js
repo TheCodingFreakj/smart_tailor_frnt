@@ -284,47 +284,47 @@ const ReusableButton = ({ label, onClick, color = 'primary', variant = 'containe
 
 
 
-const RecommendationUI = () => {
-  const [configData, setConfigData] = useState({});
+const AddNewConfig = ({configDatas, submitData,selectedCustomer}) => {
+  const [configData, setConfigData] = useState(configDatas);
+  const [newKey, setNewKey] = useState("");
+  const [newValue, setNewValue] = useState("");
+  const [selectedKey, setSelectedKey] = useState("");
+  const [newNestedKey, setNewNestedKey] = useState("");
+  const [newNestedValue, setNewNestedValue] = useState("");
 
-  const [loading, setLoading] = useState(true);
-  const [selectedCustomer, setSelectedCustomer] = useState('');
-  const [customers, setCustomers] = useState([]);
 
-      // Fetch customers and slider settings when the component mounts
-      const fetchData = async () => {
-        try {
-          const response = await axios.get(`${process.env.REACT_APP_API_URL}/slider-settings/`); // Fetch settings for all customers
- 
-        
-  
-          const customerData = response.data.map((entry) => ({
-            id: entry.customer,
-            name: entry.customer,
-            settings: entry.settings.settings,
-          }));
-  
-          setCustomers(customerData);
-  
-          if (selectedCustomer) {
-            const selectedCustomerSettings = customerData.find((customer) => customer.id === selectedCustomer);
-            if (selectedCustomerSettings) {
-              setConfigData(selectedCustomerSettings.settings);
-              setLoading(false);
-            }
-          }
-  
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
-  
-  useEffect(() => {
+  const handleCreate = () => {
+    if (!newKey) return;
+    setConfigData((prev) => ({ ...prev, [newKey]: newValue }));
+    setNewKey("");
+    setNewValue("");
+  };
 
-    fetchData();
-  }, [selectedCustomer]);
+  const handleAddNestedField = () => {
+    if (!selectedKey || !newNestedKey) return;
+    setConfigData((prev) => {
+      const newConfig = { ...prev };
+      if (typeof newConfig[selectedKey] !== "object") {
+        newConfig[selectedKey] = {};
+      }
+      newConfig[selectedKey][newNestedKey] = newNestedValue;
+      return newConfig;
+    });
+    setNewNestedKey("");
+    setNewNestedValue("");
+  };
+
+
+  
+
+  const getNestedKeys = (data) => {
+    return Object.keys(data).filter((key) => typeof data[key] === "object");
+  };
+
+
 
   const handleUpdate = () => {
+    console.log(configData)
     // setIsLoading(true);
     // // Simulate an update action with a timeout
     // setTimeout(() => {
@@ -332,102 +332,52 @@ const RecommendationUI = () => {
     //   // Perform your update logic here
     // }, 2000);
   };
-  const handleChange = (path, value) => {
-    const keys = path.split('.');
-    setConfigData((prevConfigData) => {
-      let newData = { ...prevConfigData };
-      let temp = newData;
-
-      keys.forEach((key, index) => {
-        if (index === keys.length - 1) {
-          temp[key] = value;
-        } else {
-          temp = temp[key];
-        }
-      });
-
-      return newData;
-    });
-  };
  
-  const [open, setOpen] = useState(false);
 
-  // Function to open the modal
-  const handleOpenModal = () => {
-    
-    console.log('selectedCustomer:', selectedCustomer); // Debugging
-    console.log('configData:', configData); // Debugging
-    if (selectedCustomer !== '' && !loading) {
-        setOpen(true);
-      }
-  };
-
-  useEffect(() => {
-    // Only open the modal if the conditions are met after an update
-    if (selectedCustomer !== '' && configData.length > 0) {
-        handleOpenModal(selectedCustomer);
-    }
-  }, [setSelectedCustomer]);
-      
-    const submitData = async (dta)=>{
-        console.log(dta)
-
-        try {
-            const apiUrl = `${process.env.REACT_APP_API_URL}/slider-settings/`;
-            const response = await axios.post(apiUrl, {
-              customer: selectedCustomer,
-              settings: dta,
-            });
-
-            if (response){
-                fetchData()
-            }
-            console.log('Slider settings and snippets saved:', response.data);
-          } catch (error) {
-            console.error('There was an error saving the settings and snippets:', error);
-          }
-    }
   return (
     
 
-    <Box display="flex" gap={3} sx={{ flexDirection: "row", alignItems: "flex-start", width: '100%' }}>
-      
-      {/* First Section (Reusable Select, New Setting, Nested Field Section, Button) */}
-      <Box display="flex" flexDirection="column" sx={{ width: '50%' }}>
-        <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
-          <ReusableSelect
-            label="Choose Customer"
-            value={selectedCustomer}
-            onChange={(e) => setSelectedCustomer(e.target.value)}
-            options={customers}
-          />
-         {Object.keys(configData).length !== 0 && <ReusableButton
-            label="Open Settings"
-            onClick={handleOpenModal}
-          />}
-
-        </Paper>
-        <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}> <SettingsModal
-        selectedCustomer={selectedCustomer}
-        configData={configData}
-        submitData={submitData}
-        open={open} // Pass open state
-        setOpen={setOpen} // Pass setter to control opening/closing modal
-      /></Paper>
-       
-
-      </Box>
-      
-      {/* Second Section (Snippet Management) */}
-      <Box display="flex" sx={{ width: '50%' }}>
-        <Paper elevation={3} sx={{ padding: 2, width: '100%' }}>
-          <SnippetManagementSection />
-        </Paper>
-      </Box>
+    <Box sx={{ padding: "24px" }}>
     
-    </Box>
+ 
+        
+        <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
+          <NewSettingSection
+            newKey={newKey}
+            newValue={newValue}
+            setNewKey={setNewKey}
+            setNewValue={setNewValue}
+            handleCreate={handleCreate}
+            
+          />
+        </Paper>
+    
+        <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
+          <NestedFieldSection
+            configData={configData}
+            selectedKey={selectedKey}
+            setSelectedKey={setSelectedKey}
+            newNestedKey={newNestedKey}
+            setNewNestedKey={setNewNestedKey}
+            newNestedValue={newNestedValue}
+            setNewNestedValue={setNewNestedValue}
+            handleAddNestedField={handleAddNestedField}
+            getNestedKeys={getNestedKeys}
+          />
+        </Paper>
+    
+        <Paper elevation={3} sx={{ padding: 2 }}>
+          <ReusableButton
+            label="Update Settings"
+            onClick={handleUpdate}
+          />
+        </Paper> 
+      </Box>
+      
+      
+    
     
   );
 };
 
-export default RecommendationUI;
+export default AddNewConfig;
