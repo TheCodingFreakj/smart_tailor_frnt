@@ -17,7 +17,8 @@ const SnippetEditorWithNodes = () => {
   const editorRef = React.useRef(null);
 
 
-  const [htmlContent, setHtmlContent] = useState(`<div id=schema-holder> <div class="card">
+  const [htmlContent, setHtmlContent] = useState(`<div id=schema_holder> 
+    <div class="card">
     <img src="https://via.placeholder.com/300x200" alt="Card Image">
     <div class="card-content">
       <h3 class="card-title">Card Title</h3>
@@ -286,13 +287,13 @@ const SnippetEditorWithNodes = () => {
   }
 
   const showParser = () => {
-    console.log(typeof htmlContent)
+    
     const cleanHtmlContent = htmlContent.replace(/,/g, '').trim();
 
     return <div dangerouslySetInnerHTML={{ __html: cleanHtmlContent }} />
   }
 
-  console.log(htmlContent)
+ 
 
 
   const [cssContent, setCssContent] = useState(`    body {
@@ -353,6 +354,9 @@ const SnippetEditorWithNodes = () => {
     .card-button:hover {
       background-color: #0056b3;
     }`);
+
+
+    
   const [code, setCode] = useState('');
   // Dynamically apply the CSS from the second editor
   // Applying the CSS content to the preview dynamically
@@ -487,147 +491,269 @@ const SnippetEditorWithNodes = () => {
     }
 
   }, []);
-  function generateCustomSettingsFromHTML(htmlContent) {
-    
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(htmlContent, "text/html");
+
+ 
+
+  function parseCSSContent(cssString) {
+    const cssObjects = [];
+    const regex = /([^{]+)\{([^}]+)\}/g;
+    let match;
   
-      // Helper function to create a setting
-      const createSetting = (type, label, id, defaultValue) => ({
-          type: type,
-          label: label,
-          id: id,
-          default: defaultValue || ""
-      });
+    while ((match = regex.exec(cssString)) !== null) {
+      let selector = match[1].trim();
   
-      // Helper function to check if the setting already exists
-      const settingExists = (settings, setting) => {
-          return settings.some(existingSetting => 
-              existingSetting.type === setting.type && 
-              existingSetting.label === setting.label && 
-              existingSetting.default === setting.default
-          );
-      };
+      // Remove pseudo-classes like :hover from the selector
+      selector = selector.replace(/:\w+/g, '').trim();
   
-      const settings = [];
-      let elementCount = 0;
+      // Remove any tag selectors like 'img', 'div' from the selector
+      selector = selector.replace(/\s+\w+/g, '').trim();
   
-      // Process all elements in the HTML document
-      doc.body.querySelectorAll('*').forEach(el => {
-          const tagName = el.tagName.toLowerCase();
-          let setting;
+      // Process selector parts (for classes or IDs)
+      const parts = selector.split(/\s+/); // Split by spaces to handle complex selectors
+      const processedParts = parts.map(part => {
+        if (part.startsWith('.') || part.startsWith('#')) {
+          // Remove leading . or # and replace internal . with spaces
+          return part.slice(1).replace(/\./g, ' ');
+        } else {
+          // Keep the tag name as is (e.g., img) which is already removed
+          return null;
+        }
+      }).filter(Boolean); // Remove null values
   
-          // Handle <img> elements (image picker)
-          if (tagName === 'img') {
-              setting = createSetting('image_picker', 'Image', `image_${elementCount}`, el.src);
-              if (!settingExists(settings, setting)) {
-                  settings.push(setting);
-              }
+      if (processedParts.length > 0) {
+        const newSelector = processedParts.join(" "); // Rejoin valid parts into a selector
+        const properties = match[2].trim();
+        const propertyObject = {};
+  
+        properties.split(";").forEach(property => {
+          if (property.trim()) {
+            const [key, value] = property.split(":").map(str => str.trim());
+            propertyObject[key] = value;
           }
+        });
   
-          // Handle <h1>, <h2>, <h3>, <h4>, <h5>, <h6> elements (text areas for titles)
-          else if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(tagName)) {
-              setting = createSetting('textarea', 'Text Content', `text_content_${elementCount}`, el.textContent.trim());
-              if (!settingExists(settings, setting)) {
-                  settings.push(setting);
-              }
-          }
+        cssObjects.push({ [newSelector]: propertyObject });
+      }
+    }
   
-          // Handle <p> (paragraph) elements (text areas for descriptions)
-          else if (tagName === 'p') {
-              setting = createSetting('textarea', 'Text Content', `text_content_${elementCount}`, el.textContent.trim());
-              if (!settingExists(settings, setting)) {
-                  settings.push(setting);
-              }
-          }
+    return cssObjects;
+  }
   
-          // Handle <button> elements (buttons)
-          else if (tagName === 'button') {
-              setting = createSetting('text', 'Button Text', `button_${elementCount}`, el.textContent.trim());
-              if (!settingExists(settings, setting)) {
-                  settings.push(setting);
-              }
-          }
-  
-          // Increment element count for unique IDs
-          elementCount++;
-      });
-  
-      return settings;
-  
-  
-}
 
 
 
-function extractClassesAndIdsFromHtml(htmlTemplate) {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(htmlTemplate, 'text/html');
+  function generateCustomSettingsFromHTML(htmlContent, cssContent) {
+    const cssContentList = parseCSSContent(cssContent);
   
-  let classes = [];
-  let ids = [];
-
-  // Extract class names (unique classes)
-  const elementsWithClass = doc.querySelectorAll('[class]');
-  elementsWithClass.forEach(element => {
-    const elementClasses = element.classList;
-    elementClasses.forEach(className => {
-      if (!classes.includes(className)) {
-        classes.push(className);
+    console.log("cssContentList---------------->", cssContentList);
+  
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, "text/html");
+  
+    // Helper function to create a setting
+    const createSetting = (type, label, id, defaultValue) => ({
+      type: type,
+      label: label,
+      id: id,
+      default: defaultValue || ""
+    });
+  
+    const settings = [];
+    let elementCount = 0;
+  
+    // Recursive function to process elements
+    const processElement = (el) => {
+      const tagName = el.tagName.toLowerCase();
+      let setting;
+  
+      // Get the element's ID and class list
+      const elementId = el.id;
+      const elementClassList = el.classList;
+  
+      // Determine the unique ID for the element
+      let id = '';
+  
+      if (elementId && elementId.trim() !== '') {
+        id = elementId; // Use ID if available and not empty
+      } else if (elementClassList.length && elementClassList[0].trim() !== '') {
+        id = elementClassList[0]; // Use the first class if ID is not available and class is not empty
+      } else if (el.textContent.trim() !== '') {
+        id = `${tagName}_${elementCount}`; // Use tag name and count if neither ID nor class is available and the element has content
+      }
+  
+      // If the element has no content, make the ID empty
+      if (el.textContent.trim() === '' || id === '') {
+        id = ''; // If no meaningful content, set id to ''
+      }
+  
+      // Handle different HTML tags to create appropriate settings
+      switch (tagName) {
+        case 'img': // Image picker
+          setting = createSetting('image_picker', 'Image', id, el.src);
+          break;
+        case 'h1': // Heading elements (Title)
+        case 'h2':
+        case 'h3':
+        case 'h4':
+        case 'h5':
+        case 'h6':
+          setting = createSetting('textarea', 'Text Content', id, el.textContent.trim());
+          break;
+        case 'p': // Paragraph elements (Description)
+          setting = createSetting('textarea', 'Text Content', id, el.textContent.trim());
+          break;
+        case 'button': // Button elements
+          setting = createSetting('text', 'Button Text', id, el.textContent.trim());
+          break;
+        case 'div': // Div elements (general block-level container)
+          // Check if the div has immediate text content
+          const immediateText = el.firstChild && el.firstChild.nodeType === 3;
+  
+          // If the div has immediate text content, assign it
+          if (immediateText) {
+            setting = createSetting('text', 'Div Content', id, el.firstChild.nodeValue.trim());
+          } else {
+            // Otherwise, it's likely a parent div or a div without direct text content, so assign an empty default
+            setting = createSetting('text', 'Div Content', id, ''); // Default content for parent divs or inner divs
+          }
+          break;
+        case 'a': // Anchor tags (Links)
+          setting = createSetting('text', 'Link Text', id, el.textContent.trim());
+          break;
+        case 'input': // Input fields
+          setting = createSetting('text', 'Input Value', id, el.value || '');
+          break;
+        case 'select': // Select dropdown
+          setting = createSetting('text', 'Select Value', id, el.value || '');
+          break;
+        case 'textarea': // Textarea elements
+          setting = createSetting('textarea', 'Textarea Content', id, el.value || '');
+          break;
+        default:
+          // If the tag is not explicitly handled, create a general text setting
+          setting = createSetting('text', `${tagName} Content`, id, el.textContent.trim());
+      }
+  
+      // Add setting if it doesn't already exist
+      if (setting && !settings.some(existingSetting => existingSetting.id === setting.id)) {
+        settings.push(setting);
+      }
+  
+      // If the element has child elements, process them recursively
+      if (el.children.length > 0) {
+        const childSettings = [];
+        Array.from(el.children).forEach(child => {
+          const childSettingsResult = processElement(child);
+          if (childSettingsResult) {
+            childSettings.push(childSettingsResult);
+          }
+        });
+        // If child settings exist, nest them inside the parent element
+        if (childSettings.length > 0) {
+          setting.settings = childSettings; // Add nested settings as 'innerSettings'
+        }
+      }
+  
+      // Increment element count for unique IDs
+      elementCount++;
+  
+      return setting;
+    };
+  
+    // Start processing from the root element (document body)
+    Array.from(doc.body.children).forEach(el => {
+      const elementSettings = processElement(el);
+      if (elementSettings) {
+        settings.push(elementSettings);
       }
     });
-  });
+  
+    
 
-  // Extract ids (unique ids)
-  const elementsWithId = doc.querySelectorAll('[id]');
-  elementsWithId.forEach(element => {
-    const id = element.id;
-    if (id && !ids.includes(id)) {
-      ids.push(id);
-    }
-  });
+    const finalSettings = []
+    finalSettings.push(settings[0])
 
-  return { classes, ids };
-}
+    console.log(finalSettings);
+  
+    return finalSettings;
+  }
+  
+  
+  
+
 
 const [schemaData, setschemaData] = React.useState('')
 const [liquidData, setliquidData] = React.useState('')
 function generateLiquidTemplateWithDynamicClassesAndIds(htmlTemplate, schema) {
-  const { classes, ids } = extractClassesAndIdsFromHtml(htmlTemplate);
+  
   let liquidTemplate = '';
 
-  // Adding styles to the template
-  let cssContent = classes.map(className => `.${className} {}`).join("\n");
+ 
   liquidTemplate += `<style>${cssContent}</style>`;
 
   // Add dynamic settings to the template
   liquidTemplate += `<div class="settings-container">`;
   if (schema) {
     schema.forEach(setting => {
-      let settingHtml = '';
+      
 
       // Generate HTML for each setting type, adding classes and ids dynamically
       switch (setting.type) {
         case 'text':
-          settingHtml = `
+          liquidTemplate += `
             <div class="${setting.id} setting-text" id="${setting.id}">{{ settings.${setting.id} | default: "${setting.default}" }}</div>
           `;
           break;
         case 'textarea':
-          settingHtml = `
+          liquidTemplate += `
             <div class="${setting.id} setting-textarea" id="${setting.id}">{{ settings.${setting.id} | default: "${setting.default}" }}</div>
           `;
           break;
         case 'image_picker':
-          settingHtml = `
+          liquidTemplate += `
             <img src="{{ settings.${setting.id} | default: "${setting.default}" }}" alt="Image" class="${setting.id}">
           `;
           break;
+        case 'div':
+          liquidTemplate += `
+            <div class="${setting.id} setting-div" id="${setting.id}">{{ settings.${setting.id} | default: "${setting.default}" }}</div>
+          `;
+          break;
+        case 'p':
+          liquidTemplate += `
+            <p class="${setting.id} setting-p" id="${setting.id}">{{ settings.${setting.id} | default: "${setting.default}" }}</p>
+          `;
+          break;
+        case 'button':
+          liquidTemplate += `
+            <button class="${setting.id} setting-button" id="${setting.id}">{{ settings.${setting.id} | default: "${setting.default}" }}</button>
+          `;
+          break;
+        case 'h1':
+        case 'h2':
+        case 'h3':
+        case 'h4':
+        case 'h5':
+        case 'h6':
+          liquidTemplate += `
+            <${setting.type} class="${setting.id} setting-heading" id="${setting.id}">{{ settings.${setting.id} | default: "${setting.default}" }}</${setting.type}>
+          `;
+          break;
+        case 'a':
+          liquidTemplate += `
+            <a href="{{ settings.${setting.id} | default: '${setting.default}' }}" class="${setting.id} setting-link" id="${setting.id}">{{ settings.${setting.id} | default: '${setting.default}' }}</a>
+          `;
+          break;
+        case 'img':
+          liquidTemplate += `
+            <img src="{{ settings.${setting.id} | default: '${setting.default}' }}" class="${setting.id} setting-img" id="${setting.id}" alt="Image">
+          `;
+          break;
         default:
-          settingHtml = '';
+          liquidTemplate += '';
       }
 
-      liquidTemplate += settingHtml;
+      
     });
   }
   liquidTemplate += `</div>`;
@@ -752,12 +878,14 @@ React.useEffect(()=>{
 
       <button onClick={() => {
 
-        const schema = generateCustomSettingsFromHTML(htmlContent);
+        const schema = generateCustomSettingsFromHTML(htmlContent,cssContent);
         
 
         
         setschemaData(schema)
-        console.log(schema)
+        
+
+        // const schemaUpdated = generateCustomSettingsFromHTMLUpdated(htmlContent,cssContent, schema)
 
         const liquidContent = generateLiquidTemplateWithDynamicClassesAndIds(htmlContent, schema);
         setliquidData(liquidContent)
