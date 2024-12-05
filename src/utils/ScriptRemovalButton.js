@@ -11,6 +11,7 @@ class ScriptRemovalButton extends Component {
     };
   }
 
+
   handleRemoveScript = async () => {
     const { shopId } = this.props; // Assuming shopId is passed as a prop
 
@@ -20,7 +21,7 @@ class ScriptRemovalButton extends Component {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/shopify/product-recommendations/`,  // Backend API URL
         { shopId: shopId ,action:"remove_script", internal_call:true},  // Send shopId in the body of the request
-        { headers: { "Content-Type": "application/json" } }
+        { headers: { "Content-Type": "application/json",'ngrok-skip-browser-warning': 'true', } }
       );
 
       if (response.data.success) {

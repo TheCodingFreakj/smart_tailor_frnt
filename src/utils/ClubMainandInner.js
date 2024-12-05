@@ -684,82 +684,129 @@ const SnippetEditorWithNodes = () => {
 
 const [schemaData, setschemaData] = React.useState('')
 const [liquidData, setliquidData] = React.useState('')
-function generateLiquidTemplateWithDynamicClassesAndIds(htmlTemplate, schema) {
-  
+function generateLiquidTemplateWithDynamicClassesAndIds(htmlContent, schema) {
   let liquidTemplate = '';
 
- 
-  liquidTemplate += `<style>${cssContent}</style>`;
+  
 
-  // Add dynamic settings to the template
-  liquidTemplate += `<div class="settings-container">`;
-  if (schema) {
-    schema.forEach(setting => {
-      
+  // Recursive function to handle nested settings
+  function processSettings(settings, htmlContent, parentKey = 'settings') {
+    
 
-      // Generate HTML for each setting type, adding classes and ids dynamically
-      switch (setting.type) {
-        case 'text':
-          liquidTemplate += `
-            <div class="${setting.id} setting-text" id="${setting.id}">{{ settings.${setting.id} | default: "${setting.default}" }}</div>
-          `;
-          break;
-        case 'textarea':
-          liquidTemplate += `
-            <div class="${setting.id} setting-textarea" id="${setting.id}">{{ settings.${setting.id} | default: "${setting.default}" }}</div>
-          `;
-          break;
-        case 'image_picker':
-          liquidTemplate += `
-            <img src="{{ settings.${setting.id} | default: "${setting.default}" }}" alt="Image" class="${setting.id}">
-          `;
-          break;
-        case 'div':
-          liquidTemplate += `
-            <div class="${setting.id} setting-div" id="${setting.id}">{{ settings.${setting.id} | default: "${setting.default}" }}</div>
-          `;
-          break;
-        case 'p':
-          liquidTemplate += `
-            <p class="${setting.id} setting-p" id="${setting.id}">{{ settings.${setting.id} | default: "${setting.default}" }}</p>
-          `;
-          break;
-        case 'button':
-          liquidTemplate += `
-            <button class="${setting.id} setting-button" id="${setting.id}">{{ settings.${setting.id} | default: "${setting.default}" }}</button>
-          `;
-          break;
-        case 'h1':
-        case 'h2':
-        case 'h3':
-        case 'h4':
-        case 'h5':
-        case 'h6':
-          liquidTemplate += `
-            <${setting.type} class="${setting.id} setting-heading" id="${setting.id}">{{ settings.${setting.id} | default: "${setting.default}" }}</${setting.type}>
-          `;
-          break;
-        case 'a':
-          liquidTemplate += `
-            <a href="{{ settings.${setting.id} | default: '${setting.default}' }}" class="${setting.id} setting-link" id="${setting.id}">{{ settings.${setting.id} | default: '${setting.default}' }}</a>
-          `;
-          break;
-        case 'img':
-          liquidTemplate += `
-            <img src="{{ settings.${setting.id} | default: '${setting.default}' }}" class="${setting.id} setting-img" id="${setting.id}" alt="Image">
-          `;
-          break;
-        default:
-          liquidTemplate += '';
+    // Parse the HTML content into a DOM structure
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, 'text/html');
+
+    let template = '';
+
+    settings.forEach(setting => {
+      // Generate a unique identifier based on nested level
+      const uniqueKey = `${parentKey}.${setting.id}`;
+
+      // Set the temporary flag `hasIdOrClass` based on whether the element has id or class
+      setting.hasIdOrClass = setting.id || setting.class;
+
+      // Find elements in the parsed HTML that match the `id` or `class` attributes
+      const elementsById = doc.querySelectorAll(`#${setting.id}`);
+      const elementsByClass = doc.querySelectorAll(`.${setting.id}`);
+
+      // If no `id` or `class` is found, we use a fallback method to identify the element
+      const elementsByTag = doc.querySelectorAll(`${setting.tag || '*'}`);  // Default to all elements if no tag is provided
+
+      // If the element has `id` or `class`, apply the changes based on the flag
+      if (setting.hasIdOrClass) {
+        // Update content for matching elements by id
+        elementsById.forEach(element => {
+          updateElementContent(element, setting);
+        });
+
+        // Update content for matching elements by class
+        elementsByClass.forEach(element => {
+          updateElementContent(element, setting);
+        });
+
+        // Update content for matching elements by tag if no `id` or `class` found
+        elementsByTag.forEach(element => {
+          // Ensure we don't update elements incorrectly by checking specific conditions
+          if (!elementsById.length && !elementsByClass.length) {
+            updateElementContent(element, setting);
+          }
+        });
       }
 
+      console.log('Setting:', setting);
       
+
+      // If the current setting has nested settings, process them recursively
+      if (setting.settings && Array.isArray(setting.settings)) {
+        console.log('Setting.settings:', setting.settings);
+        template += processSettings(setting.settings, htmlContent, uniqueKey);
+      } else {
+        // Generate Liquid HTML for each setting type based on the presence of `id` or `class`
+        switch (setting.type) {
+          case 'text':
+            template += `<div class="${setting.id}" id="${setting.id}">{{ ${uniqueKey} | default: "${setting.default}" }}</div>`;
+            break;
+          case 'textarea':
+            template += `<div class="${setting.id}" id="${setting.id}">{{ ${uniqueKey} | default: "${setting.default}" }}</div>`;
+            break;
+          case 'image_picker':
+            template += `<img src="{{ ${uniqueKey} | default: '${setting.default}' }}" class="${setting.id}" id="${setting.id}" alt="${setting.label}">`;
+            break;
+          case 'div':
+            template += `<div class="${setting.id}" id="${setting.id}">{{ ${uniqueKey} | default: "${setting.default}" }}</div>`;
+            break;
+          case 'button':
+            template += `<button class="${setting.id}" id="${setting.id}">{{ ${uniqueKey} | default: "${setting.default}" }}</button>`;
+            break;
+          case 'h1':
+          case 'h2':
+          case 'h3':
+          case 'h4':
+          case 'h5':
+          case 'h6':
+            template += `<${setting.type} class="${setting.id}" id="${setting.id}">{{ ${uniqueKey} | default: "${setting.default}" }}</${setting.type}>`;
+            break;
+          case 'a':
+            template += `<a href="{{ ${uniqueKey} | default: '${setting.default}' }}" class="${setting.id}" id="${setting.id}">{{ ${uniqueKey} | default: '${setting.default}' }}</a>`;
+            break;
+          case 'img':
+            template += `<img src="{{ ${uniqueKey} | default: '${setting.default}' }}" class="${setting.id}" id="${setting.id}" alt="Image">`;
+            break;
+          default:
+            template += '';
+        }
+      }
     });
+
+    return template;
+
+    function updateElementContent(element, setting) {
+      // Update the element content based on its type
+      if (setting.type === 'text' || setting.type === 'textarea' || setting.type === 'div') {
+        element.textContent = setting.default;
+      } else if (setting.type === 'image_picker' || setting.type === 'img') {
+        element.src = setting.default;
+      } else if (setting.type === 'a') {
+        element.href = setting.default;
+        element.textContent = setting.default;
+      }
+    }
+  }
+
+  // Generate the Liquid template
+  liquidTemplate += `<div class="settings-container">`;
+  if (schema && Array.isArray(schema.settings)) {
+    console.log("schema1---------->", schema);
+    liquidTemplate += processSettings(schema.settings, htmlContent);
   }
   liquidTemplate += `</div>`;
 
   return liquidTemplate;
 }
+
+
+
 
 
 
@@ -883,6 +930,9 @@ React.useEffect(()=>{
 
         
         setschemaData(schema)
+
+        console.log(schema);
+        
         
 
         // const schemaUpdated = generateCustomSettingsFromHTMLUpdated(htmlContent,cssContent, schema)

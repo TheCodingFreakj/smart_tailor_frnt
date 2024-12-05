@@ -7,7 +7,7 @@ const InstallTrackingScriptButton = ({ addCustInfo, shopId }) => {
             const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}/shopify/product-recommendations/`, // URL of your Django API
                 { shopId: shopId, action: "install_script" }, // Send shop as JSON body
-                { headers: { "Content-Type": "application/json" } } // Ensure JSON header
+                { headers: { "Content-Type": "application/json",'ngrok-skip-browser-warning': 'true', } } // Ensure JSON header
             );
 
             console.log(response.data)
@@ -20,14 +20,13 @@ const InstallTrackingScriptButton = ({ addCustInfo, shopId }) => {
         }
     };
 
-
-
+  
     const addCustomerCode = async () => {
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}/shopify/add-customer-code/`, // URL of your Django API
                 { shopId: shopId}, // Send shop as JSON body
-                { headers: { "Content-Type": "application/json" } } // Ensure JSON header
+                { headers: { "Content-Type": "application/json",'ngrok-skip-browser-warning': 'true' } } // Ensure JSON header
             );
 
             console.log(response.data)

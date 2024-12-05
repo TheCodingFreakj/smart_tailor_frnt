@@ -29,7 +29,7 @@ function HomePage({ isInstalled, isLoading, setIsLoading }) {
       console.error("Error fetching CSRF token:", error);
     }
   };
-
+  
   React.useEffect(() => {
 
     const fetchData = async (shopId) => {
@@ -40,7 +40,7 @@ function HomePage({ isInstalled, isLoading, setIsLoading }) {
         const response = await axios.post(
           `${process.env.REACT_APP_API_URL}/dashboard/`, // URL of your Django API
           { shopId: shopId }, // Send shop as JSON body
-          { headers: { "Content-Type": "application/json" } } // Ensure JSON header
+          { headers: { "Content-Type": "application/json",'ngrok-skip-browser-warning': 'true', } } // Ensure JSON header
         );
         setIsLoading(false)
         setData(response.data.shop_details.shop);

@@ -13,7 +13,7 @@ function Settings() {
     const response = await axios.post(
       `${process.env.REACT_APP_API_URL}/generate_fake_data/`,
       {},
-      { headers: { "Content-Type": "application/json" } }
+      { headers: { "Content-Type": "application/json",'ngrok-skip-browser-warning': 'true', } }
     );
     // Handle response if needed
   };

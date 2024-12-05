@@ -196,7 +196,7 @@ const SnippetManagementSection = () => {
     useEffect(() => {
       async function fetchData() {
         try {
-          const response = await axios.get(`${process.env.REACT_APP_API_URL}/dynamic-components-list/`);
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/dynamic-components-list/`, {headers:{'ngrok-skip-browser-warning': 'true'}});
           setCodeSnippets(response.data);
         } catch (error) {
           console.error("Error fetching snippets:", error);
@@ -294,7 +294,7 @@ const RecommendationUI = () => {
       // Fetch customers and slider settings when the component mounts
       const fetchData = async () => {
         try {
-          const response = await axios.get(`${process.env.REACT_APP_API_URL}/slider-settings/`); // Fetch settings for all customers
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/slider-settings/`,{headers:{'ngrok-skip-browser-warning': 'true'}}); // Fetch settings for all customers
  
         
   
@@ -377,7 +377,7 @@ const RecommendationUI = () => {
             const response = await axios.post(apiUrl, {
               customer: selectedCustomer,
               settings: dta,
-            });
+            },{headers:{'ngrok-skip-browser-warning': 'true'}});
 
             if (response){
                 fetchData()
