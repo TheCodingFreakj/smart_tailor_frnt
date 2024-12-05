@@ -17,17 +17,19 @@ const SnippetEditorWithNodes = () => {
   const editorRef = React.useRef(null);
 
 
-  const [htmlContent, setHtmlContent] = useState(`<div id=schema_holder> 
-    <div class="card">
-    <img src="https://via.placeholder.com/300x200" alt="Card Image">
-    <div class="card-content">
-      <h3 class="card-title">Card Title</h3>
-      <p class="card-description" id="card-description">
-        This is a description of the card. It provides a brief overview of the content.
-      </p>
-      <button class="card-button" onclick="changeMessage()">Click Me</button>
-    </div>
-  </div> </div>`);
+  const [htmlContent, setHtmlContent] = useState(`
+    
+    <div id=schema_holder> 
+    <div class="product-card">
+  <img src="https://via.placeholder.com/300x200" alt="Product 1">
+  <div class="product-info">
+    <h4>Product 1</h4>
+    <p>$19.99</p>
+    <button>Add to Cart</button>
+  </div>
+</div>
+</div>
+`);
 
 
 
@@ -287,16 +289,16 @@ const SnippetEditorWithNodes = () => {
   }
 
   const showParser = () => {
-    
+
     const cleanHtmlContent = htmlContent.replace(/,/g, '').trim();
 
     return <div dangerouslySetInnerHTML={{ __html: cleanHtmlContent }} />
   }
 
- 
 
 
-  const [cssContent, setCssContent] = useState(`    body {
+
+  const [cssContent, setCssContent] = useState(`   body {
       font-family: Arial, sans-serif;
       background-color: #f4f4f9;
       margin: 0;
@@ -307,56 +309,66 @@ const SnippetEditorWithNodes = () => {
       height: 100vh;
     }
 
-    .card {
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-      width: 300px;
-      text-align: center;
-    }
+   /* Product Card Layout */
+.product-card {
+  width: 250px; /* Adjust the width of each product card */
+  background-color: #fff; /* White background for each card */
+  border: 1px solid #ddd; /* Light border around the card */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  overflow: hidden; /* Hide overflow content */
+  transition: transform 0.3s ease-in-out; /* Smooth hover effect */
+  margin: 15px; /* Space between cards */
+  text-align: center; /* Center the text inside the card */
+}
 
-    .card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
+.product-card:hover {
+  transform: translateY(-10px); /* Lift card on hover */
+}
 
-    .card-content {
-      padding: 15px;
-    }
+/* Image styling */
+.product-card img {
+  width: 100%; /* Make the image fill the card's width */
+  height: 180px; /* Set a fixed height for images */
+  object-fit: cover; /* Ensure the image covers the area without distortion */
+  border-bottom: 1px solid #ddd; /* Border between the image and content */
+}
 
-    .card-title {
-      font-size: 1.5rem;
-      margin: 10px 0;
-      color: #333;
-    }
+/* Product info section */
+.product-info {
+  padding: 15px; /* Add some space around the text */
+}
 
-    .card-description {
-      font-size: 1rem;
-      color: #666;
-      margin-bottom: 20px;
-    }
+.product-info h4 {
+  font-size: 18px; /* Set the font size for the product name */
+  margin: 10px 0; /* Space between name and price */
+  color: #333; /* Dark color for text */
+}
 
-    .card-button {
-      display: inline-block;
-      padding: 10px 20px;
-      font-size: 1rem;
-      color: #fff;
-      background-color: #007bff;
-      border: none;
-      border-radius: 5px;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
+.product-info p {
+  font-size: 16px; /* Font size for the price */
+  color: #f44336; /* Red color for price */
+  margin: 10px 0; /* Space between price and button */
+}
 
-    .card-button:hover {
-      background-color: #0056b3;
-    }`);
+.product-info button {
+  background-color: #4CAF50; /* Green background for the button */
+  color: white; /* White text */
+  font-size: 16px; /* Font size for button text */
+  padding: 10px 15px; /* Padding around the button */
+  border: none; /* Remove border */
+  border-radius: 4px; /* Rounded corners for the button */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth color transition */
+}
+
+.product-info button:hover {
+  background-color: #45a049; /* Darker green when hovering */
+}
+`);
 
 
-    
+
   const [code, setCode] = useState('');
   // Dynamically apply the CSS from the second editor
   // Applying the CSS content to the preview dynamically
@@ -492,22 +504,22 @@ const SnippetEditorWithNodes = () => {
 
   }, []);
 
- 
+
 
   function parseCSSContent(cssString) {
     const cssObjects = [];
     const regex = /([^{]+)\{([^}]+)\}/g;
     let match;
-  
+
     while ((match = regex.exec(cssString)) !== null) {
       let selector = match[1].trim();
-  
+
       // Remove pseudo-classes like :hover from the selector
       selector = selector.replace(/:\w+/g, '').trim();
-  
+
       // Remove any tag selectors like 'img', 'div' from the selector
       selector = selector.replace(/\s+\w+/g, '').trim();
-  
+
       // Process selector parts (for classes or IDs)
       const parts = selector.split(/\s+/); // Split by spaces to handle complex selectors
       const processedParts = parts.map(part => {
@@ -519,37 +531,35 @@ const SnippetEditorWithNodes = () => {
           return null;
         }
       }).filter(Boolean); // Remove null values
-  
+
       if (processedParts.length > 0) {
         const newSelector = processedParts.join(" "); // Rejoin valid parts into a selector
         const properties = match[2].trim();
         const propertyObject = {};
-  
+
         properties.split(";").forEach(property => {
           if (property.trim()) {
             const [key, value] = property.split(":").map(str => str.trim());
             propertyObject[key] = value;
           }
         });
-  
+
         cssObjects.push({ [newSelector]: propertyObject });
       }
     }
-  
+
     return cssObjects;
   }
-  
+
 
 
 
   function generateCustomSettingsFromHTML(htmlContent, cssContent) {
-    const cssContentList = parseCSSContent(cssContent);
-  
-    console.log("cssContentList---------------->", cssContentList);
-  
+    
+
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, "text/html");
-  
+
     // Helper function to create a setting
     const createSetting = (type, label, id, defaultValue) => ({
       type: type,
@@ -557,35 +567,34 @@ const SnippetEditorWithNodes = () => {
       id: id,
       default: defaultValue || ""
     });
-  
+
     const settings = [];
-    let elementCount = 0;
-  
+
     // Recursive function to process elements
     const processElement = (el) => {
       const tagName = el.tagName.toLowerCase();
       let setting;
-  
+
       // Get the element's ID and class list
       const elementId = el.id;
       const elementClassList = el.classList;
-  
+
       // Determine the unique ID for the element
       let id = '';
-  
+
       if (elementId && elementId.trim() !== '') {
         id = elementId; // Use ID if available and not empty
       } else if (elementClassList.length && elementClassList[0].trim() !== '') {
         id = elementClassList[0]; // Use the first class if ID is not available and class is not empty
       } else if (el.textContent.trim() !== '') {
-        id = `${tagName}_${elementCount}`; // Use tag name and count if neither ID nor class is available and the element has content
+        id = ''; // Leave ID as an empty string (no count added)
       }
-  
-      // If the element has no content, make the ID empty
+
+      // If the element has no meaningful content, or if no ID is found, make the ID empty
       if (el.textContent.trim() === '' || id === '') {
-        id = ''; // If no meaningful content, set id to ''
+        id = ''; // Set id to empty string if no valid content or ID exists
       }
-  
+
       // Handle different HTML tags to create appropriate settings
       switch (tagName) {
         case 'img': // Image picker
@@ -608,7 +617,7 @@ const SnippetEditorWithNodes = () => {
         case 'div': // Div elements (general block-level container)
           // Check if the div has immediate text content
           const immediateText = el.firstChild && el.firstChild.nodeType === 3;
-  
+
           // If the div has immediate text content, assign it
           if (immediateText) {
             setting = createSetting('text', 'Div Content', id, el.firstChild.nodeValue.trim());
@@ -633,12 +642,12 @@ const SnippetEditorWithNodes = () => {
           // If the tag is not explicitly handled, create a general text setting
           setting = createSetting('text', `${tagName} Content`, id, el.textContent.trim());
       }
-  
+
       // Add setting if it doesn't already exist
       if (setting && !settings.some(existingSetting => existingSetting.id === setting.id)) {
         settings.push(setting);
       }
-  
+
       // If the element has child elements, process them recursively
       if (el.children.length > 0) {
         const childSettings = [];
@@ -653,13 +662,10 @@ const SnippetEditorWithNodes = () => {
           setting.settings = childSettings; // Add nested settings as 'innerSettings'
         }
       }
-  
-      // Increment element count for unique IDs
-      elementCount++;
-  
+
       return setting;
     };
-  
+
     // Start processing from the root element (document body)
     Array.from(doc.body.children).forEach(el => {
       const elementSettings = processElement(el);
@@ -667,142 +673,11 @@ const SnippetEditorWithNodes = () => {
         settings.push(elementSettings);
       }
     });
-  
-    
 
-    const finalSettings = []
-    finalSettings.push(settings[0])
+    const finalSettings = [];
+    finalSettings.push(settings[0]);
 
-    console.log(finalSettings);
-  
     return finalSettings;
-  }
-  
-  
-  
-
-
-const [schemaData, setschemaData] = React.useState('')
-const [liquidData, setliquidData] = React.useState('')
-function generateLiquidTemplateWithDynamicClassesAndIds(htmlContent, schema) {
-  let liquidTemplate = '';
-
-  
-
-  // Recursive function to handle nested settings
-  function processSettings(settings, htmlContent, parentKey = 'settings') {
-    
-
-    // Parse the HTML content into a DOM structure
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlContent, 'text/html');
-
-    let template = '';
-
-    settings.forEach(setting => {
-      // Generate a unique identifier based on nested level
-      const uniqueKey = `${parentKey}.${setting.id}`;
-
-      // Set the temporary flag `hasIdOrClass` based on whether the element has id or class
-      setting.hasIdOrClass = setting.id || setting.class;
-
-      // Find elements in the parsed HTML that match the `id` or `class` attributes
-      const elementsById = doc.querySelectorAll(`#${setting.id}`);
-      const elementsByClass = doc.querySelectorAll(`.${setting.id}`);
-
-      // If no `id` or `class` is found, we use a fallback method to identify the element
-      const elementsByTag = doc.querySelectorAll(`${setting.tag || '*'}`);  // Default to all elements if no tag is provided
-
-      // If the element has `id` or `class`, apply the changes based on the flag
-      if (setting.hasIdOrClass) {
-        // Update content for matching elements by id
-        elementsById.forEach(element => {
-          updateElementContent(element, setting);
-        });
-
-        // Update content for matching elements by class
-        elementsByClass.forEach(element => {
-          updateElementContent(element, setting);
-        });
-
-        // Update content for matching elements by tag if no `id` or `class` found
-        elementsByTag.forEach(element => {
-          // Ensure we don't update elements incorrectly by checking specific conditions
-          if (!elementsById.length && !elementsByClass.length) {
-            updateElementContent(element, setting);
-          }
-        });
-      }
-
-      console.log('Setting:', setting);
-      
-
-      // If the current setting has nested settings, process them recursively
-      if (setting.settings && Array.isArray(setting.settings)) {
-        console.log('Setting.settings:', setting.settings);
-        template += processSettings(setting.settings, htmlContent, uniqueKey);
-      } else {
-        // Generate Liquid HTML for each setting type based on the presence of `id` or `class`
-        switch (setting.type) {
-          case 'text':
-            template += `<div class="${setting.id}" id="${setting.id}">{{ ${uniqueKey} | default: "${setting.default}" }}</div>`;
-            break;
-          case 'textarea':
-            template += `<div class="${setting.id}" id="${setting.id}">{{ ${uniqueKey} | default: "${setting.default}" }}</div>`;
-            break;
-          case 'image_picker':
-            template += `<img src="{{ ${uniqueKey} | default: '${setting.default}' }}" class="${setting.id}" id="${setting.id}" alt="${setting.label}">`;
-            break;
-          case 'div':
-            template += `<div class="${setting.id}" id="${setting.id}">{{ ${uniqueKey} | default: "${setting.default}" }}</div>`;
-            break;
-          case 'button':
-            template += `<button class="${setting.id}" id="${setting.id}">{{ ${uniqueKey} | default: "${setting.default}" }}</button>`;
-            break;
-          case 'h1':
-          case 'h2':
-          case 'h3':
-          case 'h4':
-          case 'h5':
-          case 'h6':
-            template += `<${setting.type} class="${setting.id}" id="${setting.id}">{{ ${uniqueKey} | default: "${setting.default}" }}</${setting.type}>`;
-            break;
-          case 'a':
-            template += `<a href="{{ ${uniqueKey} | default: '${setting.default}' }}" class="${setting.id}" id="${setting.id}">{{ ${uniqueKey} | default: '${setting.default}' }}</a>`;
-            break;
-          case 'img':
-            template += `<img src="{{ ${uniqueKey} | default: '${setting.default}' }}" class="${setting.id}" id="${setting.id}" alt="Image">`;
-            break;
-          default:
-            template += '';
-        }
-      }
-    });
-
-    return template;
-
-    function updateElementContent(element, setting) {
-      // Update the element content based on its type
-      if (setting.type === 'text' || setting.type === 'textarea' || setting.type === 'div') {
-        element.textContent = setting.default;
-      } else if (setting.type === 'image_picker' || setting.type === 'img') {
-        element.src = setting.default;
-      } else if (setting.type === 'a') {
-        element.href = setting.default;
-        element.textContent = setting.default;
-      }
-    }
-  }
-
-  // Generate the Liquid template
-  liquidTemplate += `<div class="settings-container">`;
-  if (schema && Array.isArray(schema.settings)) {
-    console.log("schema1---------->", schema);
-    liquidTemplate += processSettings(schema.settings, htmlContent);
-  }
-  liquidTemplate += `</div>`;
-
-  return liquidTemplate;
 }
 
 
@@ -812,19 +687,128 @@ function generateLiquidTemplateWithDynamicClassesAndIds(htmlContent, schema) {
 
 
 
-const [renderedHtml, setRenderedHtml] = useState('');
-React.useEffect(()=>{
-  const engine = new Liquid();
-        // Render the template with the provided data
-    engine.parseAndRender(liquidData, schemaData)
-    .then(result => {
-      setRenderedHtml(result);
-    })
-    .catch(error => {
-      console.error('Error rendering Liquid template:', error);
-    });
+  const [schemaData, setschemaData] = React.useState('')
+  const [liquidData, setliquidData] = React.useState('')
+  function generateLiquidTemplateWithDynamicClassesAndIds(htmlContent, schema) {
+    let liquidTemplate = '';
+    
+    function processSettings(settings, htmlContent, parentKey = 'settings') {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlContent, 'text/html');
+    
+      let template = '';
+    
+      settings.forEach(setting => {
+        // Ensure that setting.id is valid and properly formatted to avoid trailing dots
+        let uniqueKey = `${parentKey}.${setting.id}`;
+        
+        // Check if the last character of uniqueKey is a dot, and remove it if present
+        if (uniqueKey.endsWith('.')) {
+          uniqueKey = uniqueKey.slice(0, -1);
+        }
+    
+        let elementById = null;
+        let elementByClass = null;
+    
+        // Validate the id to prevent invalid selectors
+        const isValidId = setting.id && setting.id.trim() !== '';
+    
+        if (isValidId) {
+          try {
+            elementById = doc.querySelector(`#${setting.id}`);
+            elementByClass = doc.querySelector(`.${setting.id}`);
+          } catch (error) {
+            console.warn(`Invalid selector for setting.id: ${setting.id}`, error);
+          }
+        }
+    
+        // Generate attributes based on detected HTML elements
+        let attributes = '';
+        if (elementById && elementByClass) {
+          attributes = `id="${setting.id}" class="${setting.id}"`;
+        } else if (elementById) {
+          attributes = `id="${setting.id}"`;
+        } else if (elementByClass) {
+          attributes = `class="${setting.id}"`;
+        }
+    
+        // Handle nested settings recursively
+        if (setting.settings && Array.isArray(setting.settings)) {
+          // Render the container even if it doesn't have direct content
+          template += `<div ${attributes}>`;
+          template += processSettings(setting.settings, htmlContent, uniqueKey);
+          template += `</div>`;
+        } else {
+          // Generate Liquid template based on setting type
+          switch (setting.type) {
+            case 'text':
+            case 'textarea':
+            case 'p':
+              template += `<div ${attributes}>{{ ${uniqueKey} | default: "${setting.default}" }}</div>`;
+              break;
+            case 'div': // For structural divs with no direct content
+              template += `<div ${attributes}>{{ ${uniqueKey} | default: "" }}</div>`;
+              break;
+            case 'image_picker':
+            case 'img':
+              template += `<img ${attributes} src="{{ ${uniqueKey} | default: '${setting.default}' }}" alt="${setting.label || 'Image'}">`;
+              break;
+            case 'button':
+              template += `<button ${attributes}>{{ ${uniqueKey} | default: "${setting.default}" }}</button>`;
+              break;
+            case 'h1':
+            case 'h2':
+            case 'h3':
+            case 'h4':
+            case 'h5':
+            case 'h6':
+              template += `<${setting.type} ${attributes}>{{ ${uniqueKey} | default: "${setting.default}" }}</${setting.type}>`;
+              break;
+            case 'a':
+              template += `<a ${attributes} href="{{ ${uniqueKey} | default: '${setting.default}' }}">{{ ${uniqueKey} | default: '${setting.default}' }}</a>`;
+              break;
+            case 'span': // Handle span elements
+              template += `<span ${attributes}>{{ ${uniqueKey} | default: "${setting.default}" }}</span>`;
+              break;
+            default:
+              template += `<div ${attributes}>{{ ${uniqueKey} | default: "${setting.default}" }}</div>`;
+          }
+        }
+      });
+    
+      return template;
+    }
+    
+    liquidTemplate += `<div class="settings-container">`;
+    
+    if (schema && Array.isArray(schema)) {
+      liquidTemplate += processSettings(schema[0].settings, htmlContent);
+    }
+    
+    liquidTemplate += `</div>`;
+    
+    return liquidTemplate;
+  }
+  
+  
+  
 
-},[liquidData])
+
+
+
+  const [renderedHtml, setRenderedHtml] = useState('');
+  React.useEffect(() => {
+    const engine = new Liquid();
+    // Render the template with the provided data
+    engine.parseAndRender(liquidData, schemaData)
+      .then(result => {
+        setRenderedHtml(result);
+      })
+      .catch(error => {
+        console.error('Error rendering Liquid template:', error);
+      });
+
+  }, [liquidData])
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -925,15 +909,15 @@ React.useEffect(()=>{
 
       <button onClick={() => {
 
-        const schema = generateCustomSettingsFromHTML(htmlContent,cssContent);
-        
+        const schema = generateCustomSettingsFromHTML(htmlContent, cssContent);
 
-        
+
+
         setschemaData(schema)
 
-        console.log(schema);
-        
-        
+
+
+
 
         // const schemaUpdated = generateCustomSettingsFromHTMLUpdated(htmlContent,cssContent, schema)
 
@@ -941,19 +925,19 @@ React.useEffect(()=>{
         setliquidData(liquidContent)
 
         console.log(liquidContent)
-       
-        
+
+
       }}>Generate Schema</button>
 
-<div style={{ padding: '20px' }}>
-      <h1>Schema Structure</h1>
-      <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-        {JSON.stringify(schemaData, null, 2)}
-      </pre>
-      <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-      <div dangerouslySetInnerHTML={{ __html: renderedHtml }} />
-      </pre>
-    </div>
+      <div style={{ padding: '20px' }}>
+        <h1>Schema Structure</h1>
+        <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+          {JSON.stringify(schemaData, null, 2)}
+        </pre>
+        <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+          <div dangerouslySetInnerHTML={{ __html: renderedHtml }} />
+        </pre>
+      </div>
     </div>
 
   );

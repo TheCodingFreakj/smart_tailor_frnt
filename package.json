@@ -45,7 +45,7 @@
       "react-app/jest"
     ]
   },
-  "proxy": "https://75e2-2409-4062-2d1b-c5b7-28a5-d207-64ab-34dd.ngrok-free.app",
+  
  
   "browserslist": {
     "production": [
