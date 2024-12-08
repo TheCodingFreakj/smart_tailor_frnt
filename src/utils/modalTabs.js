@@ -28,11 +28,7 @@ const HorizontalTabs = ({configData, submitData,selectedCustomer}) => {
         return <Suspense fallback={<div>Loading editor...</div>}>
 
           <ProductCard selectedCustomer={selectedCustomer}/>
-        {/* <SnippetEditorWithNodes 
-          selectedCustomer={selectedCustomer} 
-          configDatas={configData} 
-          submitData={submitData} 
-        /> */}
+        
       </Suspense>
       case 2:
         return <Typography>Content for Tab 3</Typography>;
@@ -53,8 +49,7 @@ const HorizontalTabs = ({configData, submitData,selectedCustomer}) => {
         aria-label="horizontal tabs example"
       >
         <Tab label="Editing Main Layout Config" />
-        <Tab label="Add New Main Config" />
-        <Tab label="Preview" />
+        <Tab label="Editing Slider Content" />
       </Tabs>
 
       {/* Tab Content */}
