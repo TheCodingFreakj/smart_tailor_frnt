@@ -12,7 +12,7 @@ export const SettingsModal = ({ selectedCustomer,submitData, configData, open, s
 
   
     return (
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
+      <Dialog open={open} onClose={handleClose} fullScreen >
         <DialogTitle>Settings</DialogTitle>
         <DialogContent>
             

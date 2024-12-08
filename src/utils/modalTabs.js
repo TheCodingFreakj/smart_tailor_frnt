@@ -2,7 +2,9 @@ import React, { useState, Suspense, lazy } from 'react';
 import { Box, Tabs, Tab, Typography, Paper } from "@mui/material";
 import { RenderInputFields } from './RenderInner'; // Assuming you have this component
 // Lazy load the LiquidTemplateEditor component
-const SnippetEditorWithNodes = lazy(() => import('./ClubMainandInner'));
+const ProductCard = lazy(() => import('./DynamicLayoutCreator'));
+
+
 
 
 
@@ -24,11 +26,13 @@ const HorizontalTabs = ({configData, submitData,selectedCustomer}) => {
           ;
       case 1:
         return <Suspense fallback={<div>Loading editor...</div>}>
-        <SnippetEditorWithNodes 
+
+          <ProductCard selectedCustomer={selectedCustomer}/>
+        {/* <SnippetEditorWithNodes 
           selectedCustomer={selectedCustomer} 
           configDatas={configData} 
           submitData={submitData} 
-        />
+        /> */}
       </Suspense>
       case 2:
         return <Typography>Content for Tab 3</Typography>;

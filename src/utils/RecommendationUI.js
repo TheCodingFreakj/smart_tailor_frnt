@@ -288,7 +288,20 @@ const RecommendationUI = () => {
   const [configData, setConfigData] = useState({});
 
   const [loading, setLoading] = useState(true);
-  const [selectedCustomer, setSelectedCustomer] = useState('');
+  const [selectedCustomer, setSelectedCustomer] = useState(() => {
+    // Retrieve the selected customer from localStorage
+    const savedCustomer = localStorage.getItem('selectedCustomer');
+    return savedCustomer || ''; // Return savedCustomer if found, otherwise default to empty string
+  });
+
+  // Handle when the user selects a new customer
+  const handleCustomerChange = (e) => {
+    const customer = e.target.value;
+    setSelectedCustomer(customer);
+
+    // Save the selected customer to localStorage
+    localStorage.setItem('selectedCustomer', customer);
+  };
   const [customers, setCustomers] = useState([]);
 
       // Fetch customers and slider settings when the component mounts
@@ -368,7 +381,35 @@ const RecommendationUI = () => {
         handleOpenModal(selectedCustomer);
     }
   }, [setSelectedCustomer]);
-      
+
+    // Function to load the modal state from localStorage
+  const loadModalState = () => {
+    const savedOpenState = localStorage.getItem('modalOpenState');
+    if (savedOpenState !== null) {
+      return JSON.parse(savedOpenState);
+    }
+    return false; // Default to 'false' if not found in localStorage
+  };
+
+  // Use effect to initialize state on component mount
+  useEffect(() => {
+    const initialState = loadModalState();
+    setOpen(initialState); // Set the modal state based on the saved value
+  }, []);
+
+  useEffect(() => {
+    if (window.performance) {
+      if (performance.navigation.type === 1) {
+        if (selectedCustomer !== '') {
+        localStorage.setItem('modalOpenState', true);
+        }
+      } else {
+        console.log('Page was accessed normally');
+      }
+    }
+  }, []);
+  
+  
     const submitData = async (dta)=>{
         console.log(dta)
 
@@ -398,7 +439,7 @@ const RecommendationUI = () => {
           <ReusableSelect
             label="Choose Customer"
             value={selectedCustomer}
-            onChange={(e) => setSelectedCustomer(e.target.value)}
+            onChange={handleCustomerChange}
             options={customers}
           />
          {Object.keys(configData).length !== 0 && <ReusableButton

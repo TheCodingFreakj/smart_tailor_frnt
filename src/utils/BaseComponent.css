@@ -1,0 +1,108 @@
+/* General Reset */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Top Color Picker Bar */
+.color-picker-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background-color: #f7f7f7;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 15px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.color-picker-label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.color-target-selector {
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.color-picker {
+  border: none;
+  cursor: pointer;
+  height: 30px;
+  width: 40px;
+  padding: 0;
+  background: none;
+}
+
+/* Edit Button */
+.edit-button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
+}
+
+
+
+/* Editable Fields */
+input[type='text'],
+textarea,
+input[type='number'] {
+  width: calc(100% - 20px);
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.leftContent {
+ 
+  padding: 20px;
+}
+.rightContent {
+ 
+  position: relative;
+  padding: 20px;
+  top: 57px;
+ 
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .fancy-product-card {
+    max-width: 100%;
+  }
+  .edit-button {
+    margin: 5px;
+  }
+  .color-picker-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
