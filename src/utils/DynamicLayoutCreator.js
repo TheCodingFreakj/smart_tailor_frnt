@@ -172,7 +172,7 @@ const ProductCard = ({ selectedCustomer }) => {
 
       {/* Display BaseComponent */}
       <div className="product-cards">
-      <BaseComponent fields={fields ? fields : ""} /> 
+      <BaseComponent fields={fields ? fields : ""} selectedCustomer={selectedCustomer} /> 
       </div>
     </div>
   );

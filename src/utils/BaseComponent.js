@@ -181,7 +181,12 @@ const BaseComponent = (props) => {
 
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/capture-content/`, {
         html: parsedData, // Send the HTML content
-      }, { headers: { "Content-Type": "application/json", 'ngrok-skip-browser-warning': 'true', } });
+      
+          customer: props.selectedCustomer,
+          shop: localStorage.getItem("shopParams"),
+      
+       
+      },{ headers: { "Content-Type": "application/json", 'ngrok-skip-browser-warning': 'true', } });
       console.log('HTML successfully sent to backend:', response.data);
     } catch (error) {
       console.error('Error sending HTML to backend:', error);
@@ -242,7 +247,7 @@ const BaseComponent = (props) => {
         {isEditing && (
 
           <div>
-            <button onClick={toggleFontColorMode}>
+            <button className="edit-button" onClick={toggleFontColorMode}>
               {isFontColorEditing ? 'Stop Font/Color Editing' : 'Edit Font/Color/Size'}
             </button>
             <div className="customization-bar">
@@ -336,6 +341,7 @@ const BaseComponent = (props) => {
 
         <div className="ref-container" ref={cardRef}>
           <div
+            id="fancy-product-card"
             style={{
               ...styles.fancyProductCard,
               backgroundColor: bgColor,
@@ -345,6 +351,7 @@ const BaseComponent = (props) => {
           >
             <div style={styles.cardImage}>
               <img
+                id="product-image"
                 src="https://via.placeholder.com/300x200"
                 alt="Product"
                 style={styles.productImage}
@@ -353,6 +360,7 @@ const BaseComponent = (props) => {
             <div style={styles.cardContent}>
               {/* Editable Title */}
               <h2
+              id="product-title"
                 style={{
                   ...styles.productTitle,
                   color: editableTitleColor,
@@ -360,19 +368,12 @@ const BaseComponent = (props) => {
                   fontStyle: fontStyle, // Font style adjustment
                 }}
               >
-                {isEditing && !isFontColorEditing? (
-                  <input
-                    type="text"
-                    value={editableTitle}
-                    onChange={(e) => setEditableTitle(e.target.value)}
-                  />
-                ) : (
-                  editableTitle
-                )}
+                {editableTitle}
               </h2>
 
               {/* Editable Description */}
               <p
+              id="product-description"
                 style={{
                   ...styles.productDescription,
                   color: editableDescriptionColor,
@@ -380,40 +381,19 @@ const BaseComponent = (props) => {
                   fontStyle: fontStyle, // Font style adjustment
                 }}
               >
-                {isEditing && !isFontColorEditing ? (
-                  <textarea
-                    value={editableDescription}
-                    onChange={(e) => setEditableDescription(e.target.value)}
-                  />
-                ) : (
-                  editableDescription || 'No description available.'
-                )}
+                {editableDescription || 'No description available.'}
               </p>
 
               {/* Editable Price */}
               <div style={styles.productDetails}>
-                <span style={styles.detailItem}>
+                <span  id="detail-items" style={styles.detailItem}>
                   <strong>Publications:</strong> {props.fields.publication_count}
                 </span>
-                <span style={styles.detailItem}>
+                <span id="detail-item" style={styles.detailItem}>
                   <strong>Price:</strong> {props.fields.currency}{' '}
-                  {isEditing && !isFontColorEditing? (
-                    <>
-                      <input
-                        type="number"
-                        value={editableMinPrice}
-                        onChange={(e) => setEditableMinPrice(e.target.value)}
-                      />{' '}
-                      -{' '}
-                      <input
-                        type="number"
-                        value={editableMaxPrice}
-                        onChange={(e) => setEditableMaxPrice(e.target.value)}
-                      />
-                    </>
-                  ) : (
-                    `${editableMinPrice} - ${editableMaxPrice}`
-                  )}
+
+                  {`${editableMinPrice} - ${editableMaxPrice}`}
+                 
                 </span>
               </div>
 
@@ -426,27 +406,19 @@ const BaseComponent = (props) => {
                   backgroundColor: editableButtonBgColor,
                 }}
               >
-                {isEditing && !isFontColorEditing? (
-                  <input
-                    type="text"
-                    value={editableButtonText}
-                    onChange={(e) => setEditableButtonText(e.target.value)}
-                  />
-                ) : (
-                  editableButtonText
-                )}
+                {editableButtonText}
               </button>
             </div>
           </div>
         </div>
 
-        <button onClick={reParseHTML}>Parse Card Content</button>
+        <button className="edit-button" onClick={reParseHTML}>Parse Card Content</button>
       </div>
 
       {/* Right Side Content */}
       <div className='rightContent'>
         <div dangerouslySetInnerHTML={{ __html: parsedData }} />
-        <button onClick={sendDataHtml}>Add Product</button>
+        <button className="edit-button" onClick={sendDataHtml}>Add Design</button>
       </div>
     </div>
 
