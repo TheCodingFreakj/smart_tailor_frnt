@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { Fragment } from 'react';
 const ShowHideSlider = ({shopId }) => {
     const [message, setMessage] = React.useState("")
-    const [showSlider, setshowSlider] = React.useState(true)
+    const [showSlider, setshowSlider] = React.useState(false)
 
     const toggleSlider = async ()=>{
         setshowSlider(!showSlider)
@@ -32,20 +32,7 @@ const ShowHideSlider = ({shopId }) => {
     return (
 
         <Fragment>
-{showSlider == true ? <button 
-    onClick={toggleSlider} 
-    style={{
-        backgroundColor: "#007bff",
-        color: "#fff",
-        padding: "10px 20px",
-        border: "none",
-        borderRadius: "5px",
-        cursor: "pointer",
-        fontSize: "16px"
-    }}
->
-    Show Slider
-</button>: <button 
+{showSlider ? <button 
     onClick={toggleSlider} 
     style={{
         backgroundColor: "#007bff",
@@ -58,6 +45,19 @@ const ShowHideSlider = ({shopId }) => {
     }}
 >
     Hide Slider
+</button>: <button 
+    onClick={toggleSlider} 
+    style={{
+        backgroundColor: "#007bff",
+        color: "#fff",
+        padding: "10px 20px",
+        border: "none",
+        borderRadius: "5px",
+        cursor: "pointer",
+        fontSize: "16px"
+    }}
+>
+    Show Slider
 </button>}
 
             {message && <p>{message}</p>}
