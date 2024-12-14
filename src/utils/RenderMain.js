@@ -18,7 +18,7 @@ export const SettingsModal = ({ selectedCustomer,submitData, configData, open, s
 
             
           {/* Render settings only if selectedCustomer is not empty and configData has data */}
-          {configData !== null && Object.keys(configData).length !== 0 && (
+          {selectedCustomer!=='' && (
             <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
               <HorizontalTabs selectedCustomer={selectedCustomer} configData={configData} submitData={submitData}/>
             </Paper>

@@ -8,7 +8,7 @@ const ShowHideSlider = ({shopId, selectedCustomer }) => {
         
          let res = await showHide()
 
-        if (res == "As the Customer Visits the page the tracker would be active"){
+        if (res == "As the Customer Visits the page the tracker would be active" || res == 'The Tracking is Active'){
             setshowSlider(!showSlider)
         }
     }

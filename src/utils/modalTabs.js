@@ -31,9 +31,11 @@ const HorizontalTabs = ({configData, submitData,selectedCustomer}) => {
     switch (index) {
       case 0:
         return (
-          <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
-            <RenderInputFields configData={configData} submitData={submitData} />
-          </Paper>
+
+          "configure slider settings"
+          // <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
+          //   <RenderInputFields configData={configData} submitData={submitData} />
+          // </Paper>
         );
       case 1:
         return (

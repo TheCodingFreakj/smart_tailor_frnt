@@ -18,20 +18,11 @@ import {
 import { SettingsModal } from "./RenderMain";
 import InstallTrackingScriptButton from "./InstallTrackingScriptButton";
 import DeleteIcon from "@mui/icons-material/Delete"; // For snippet deletion
+import InstallTrackingButton from "./InstallScript";
 import axios from "axios";
+import RemoveAll from "./RemoveAll";
 
-const ReusableTextField = ({ label, value, onChange, error, helperText }) => (
-  <TextField
-    fullWidth
-    label={label}
-    value={value}
-    onChange={onChange}
-    variant="outlined"
-    error={error}
-    helperText={helperText}
-   
-  />
-);
+
 
 const ReusableSelect = ({ label, value, onChange, options }) => (
     <FormControl fullWidth sx={{ marginBottom: "16px", width: "50%" }}>
@@ -51,84 +42,8 @@ const ReusableSelect = ({ label, value, onChange, options }) => (
   );
   
 
-const NewSettingSection = ({ newKey, newValue, setNewKey, setNewValue, handleCreate, isSubmitting }) => (
-  <Box sx={{ marginTop: "24px" }}>
-    <Typography variant="h6">Add New Key</Typography>
-    <Box display="flex" gap={0.1} sx={{ flexDirection: "row", alignItems: "flex-start" }}>
-      <Box display="flex" gap={2} sx={{ flexDirection: "column"}}>
-        <ReusableTextField
-          label="New Key"
-          value={newKey}
-          onChange={(e) => setNewKey(e.target.value)}
-          error={!newKey}
-          helperText={!newKey ? "Key cannot be empty" : ""}
-        />
-      </Box>
-      <Box display="flex" gap={2} sx={{ flexDirection: "column"}}>
-        <ReusableTextField
-          label="New Value"
-          value={newValue}
-          onChange={(e) => setNewValue(e.target.value)}
-        />
-      </Box>
-    </Box>
-    <Button
-      variant="contained"
-      color="secondary"
-      onClick={handleCreate}
-      sx={{ marginTop: "16px" }}
-      disabled={isSubmitting}
-    >
-      {isSubmitting ? <CircularProgress size={24} /> : "Add New Key"}
-    </Button>
-  </Box>
-);
 
-const NestedFieldSection = ({
-  configData,
-  selectedKey,
-  setSelectedKey,
-  newNestedKey,
-  setNewNestedKey,
-  newNestedValue,
-  setNewNestedValue,
-  handleAddNestedField,
-  getNestedKeys
-}) => (
-  <Box sx={{ marginTop: "24px" }}>
-    <Typography variant="h6">Add Nested Field to Existing Key</Typography>
-    <ReusableSelect
-      label="Choose Key"
-      value={selectedKey}
-      onChange={(e) => setSelectedKey(e.target.value)}
-      options={getNestedKeys(configData)}
-    />
-     <Box display="flex" gap={0.1} sx={{ flexDirection: "row", alignItems: "flex-start" }}>
-     <Box display="flex" gap={2} sx={{ flexDirection: "column"}}>
-        <ReusableTextField
-          label="New Nested Key"
-          value={newNestedKey}
-          onChange={(e) => setNewNestedKey(e.target.value)}
-        />
-      </Box>
-      <Box display="flex" gap={2} sx={{ flexDirection: "column"}}>
-        <ReusableTextField
-          label="New Nested Value"
-          value={newNestedValue}
-          onChange={(e) => setNewNestedValue(e.target.value)}
-        />
-      </Box>
-    </Box>
-    <Button
-      variant="contained"
-      color="secondary"
-      onClick={handleAddNestedField}
-      sx={{ marginTop: "16px" }}
-    >
-      Add Nested Field
-    </Button>
-  </Box>
-);
+
 
 
   
@@ -176,9 +91,8 @@ const RecommendationUI = () => {
         
   
           const customerData = response.data.map((entry) => ({
-            id: entry.customer,
-            name: entry.customer,
-            settings: entry.settings.settings,
+            id: entry.customer_id,
+            name: entry.customer_id,
           }));
   
           setCustomers(customerData);
@@ -201,31 +115,8 @@ const RecommendationUI = () => {
     fetchData();
   }, [selectedCustomer]);
 
-  const handleUpdate = () => {
-    // setIsLoading(true);
-    // // Simulate an update action with a timeout
-    // setTimeout(() => {
-    //   setIsLoading(false);
-    //   // Perform your update logic here
-    // }, 2000);
-  };
-  const handleChange = (path, value) => {
-    const keys = path.split('.');
-    setConfigData((prevConfigData) => {
-      let newData = { ...prevConfigData };
-      let temp = newData;
-
-      keys.forEach((key, index) => {
-        if (index === keys.length - 1) {
-          temp[key] = value;
-        } else {
-          temp = temp[key];
-        }
-      });
-
-      return newData;
-    });
-  };
+  
+ 
  
   const [open, setOpen] = useState(false);
 
@@ -303,6 +194,8 @@ const RecommendationUI = () => {
       );
       // Handle response if needed
     };
+
+    console.log("customers----------->",customers)
   return (
     
 
@@ -317,7 +210,7 @@ const RecommendationUI = () => {
             onChange={handleCustomerChange}
             options={customers}
           />
-         {Object.keys(configData).length !== 0 && <ReusableButton
+         {customers.length !== 0 && <ReusableButton
             label="Open Settings"
             onClick={handleOpenModal}
           />}
@@ -339,6 +232,21 @@ const RecommendationUI = () => {
       {/* Second Section (Snippet Management) */}
       <Box display="flex" sx={{ width: '50%' }}>
         <Paper elevation={3} sx={{ padding: 2, width: '100%' }}>
+        <Typography variant="h6" gutterBottom>
+                    Install Trackers- Slider Manager
+                  </Typography>
+
+                  <InstallTrackingButton shopId={localStorage.getItem("shopParams")} identifier={"slider"} />
+                  <Typography variant="h6" gutterBottom>
+                    Install Trackers- Frequently Bought together
+                  </Typography>
+                  <InstallTrackingButton shopId={localStorage.getItem("shopParams")} identifier={"fbought"} />
+        <Typography variant="h6" gutterBottom>
+                    Clear All Data
+                  </Typography>
+
+                  <RemoveAll shopId={localStorage.getItem("shopParams")}/>
+
         <Typography variant="h6" gutterBottom>
                     Track Customer
                   </Typography>
