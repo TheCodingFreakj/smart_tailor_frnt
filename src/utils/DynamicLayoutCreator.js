@@ -6,6 +6,7 @@ import ScriptRemovalButton from "./ScriptRemovalButton";
 import InstallTrackingButton from "./InstallScript";
 import RemoveAll from "./RemoveAll";
 import axios from "axios";
+import ShowHideSlider from "./showSlider";
 
 const ProductCard = ({ selectedCustomer }) => {
   // State variables for product card features
@@ -96,6 +97,10 @@ const ProductCard = ({ selectedCustomer }) => {
 
         <div style={{ marginLeft: "20px" }}>
                 <RemoveAll shopId={localStorage.getItem("shopParams")} />
+            </div>
+
+            <div style={{ marginLeft: "20px" }}>
+                <ShowHideSlider shopId={localStorage.getItem("shopParams")} />
             </div>
       </div>
 
