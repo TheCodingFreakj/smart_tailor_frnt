@@ -1,20 +1,18 @@
 import axios from 'axios';
 import React, { Fragment } from 'react';
-const InstallTrackingScriptButton = ({  shopId }) => {
+const InstallTrackingButton = ({shopId,identifier }) => {
     const [message, setMessage] = React.useState("")
-    
-  
-    const addCustomerCode = async () => {
+    const installScript = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_API_URL}/shopify/add-customer-code/`, // URL of your Django API
-                { shopId: shopId}, // Send shop as JSON body
-                { headers: { "Content-Type": "application/json",'ngrok-skip-browser-warning': 'true' } } // Ensure JSON header
+                `${process.env.REACT_APP_API_URL}/shopify/product-recommendations/`, // URL of your Django API
+                { shopId: shopId, action: "install_script",preference:identifier }, // Send shop as JSON body
+                { headers: { "Content-Type": "application/json",'ngrok-skip-browser-warning': 'true', } } // Ensure JSON header
             );
 
             console.log(response.data)
             if (response.data.success) {
-                setMessage("Customer Info Installed Successfully")
+                setMessage("Tracker Installed Successfully")
             }
         } catch (error) {
             console.error("Error installing script:", error);
@@ -22,13 +20,14 @@ const InstallTrackingScriptButton = ({  shopId }) => {
         }
     };
 
+  
+  
 
     return (
 
         <Fragment>
-
 <button 
-    onClick={addCustomerCode} 
+    onClick={installScript} 
     style={{
         backgroundColor: "#007bff",
         color: "#fff",
@@ -39,7 +38,7 @@ const InstallTrackingScriptButton = ({  shopId }) => {
         fontSize: "16px"
     }}
 >
-    Add Customer Info
+    Add Product View Script
 </button>
 
             {message && <p>{message}</p>}
@@ -49,4 +48,4 @@ const InstallTrackingScriptButton = ({  shopId }) => {
     );
 };
 
-export default InstallTrackingScriptButton;
+export default InstallTrackingButton;

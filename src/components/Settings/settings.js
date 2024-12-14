@@ -7,16 +7,7 @@ import axios from "axios";
 import RecommendationUI from "../../utils/RecommendationUI";
 
 function Settings() {
-  const [data, setData] = React.useState("");
 
-  const handle = async () => {
-    const response = await axios.post(
-      `${process.env.REACT_APP_API_URL}/generate_fake_data/`,
-      {},
-      { headers: { "Content-Type": "application/json",'ngrok-skip-browser-warning': 'true', } }
-    );
-    // Handle response if needed
-  };
 
   return (
     <Fragment>
@@ -74,36 +65,11 @@ function Settings() {
               {/* Sidebar Settings */}
               <Grid2 item xs={12} md={6}>
                 <Paper sx={{ padding: 3, boxShadow: 3, marginBottom: 2 }}>
-                  <Typography variant="h6" gutterBottom>
-                    Script Management
-                  </Typography>
-                  <InstallTrackingScriptButton shopId={localStorage.getItem("shopParams")} />
-                  <ScriptRemovalButton shopId={localStorage.getItem("shopParams")} />
+                  
+                  
                 </Paper>
               </Grid2>
 
-              {/* Track Customer Settings */}
-              <Grid2 item xs={12} md={6}>
-                <Paper sx={{ padding: 3, boxShadow: 3, marginBottom: 2 }}>
-                  <Typography variant="h6" gutterBottom>
-                    Track Customer
-                  </Typography>
-                  <InstallTrackingScriptButton addCustInfo={true} shopId={localStorage.getItem("shopParams")} />
-                </Paper>
-
-                <Box sx={{ marginTop: 3 }}>
-                  {/* Fake Data Installation Button */}
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    onClick={handle}
-                    sx={{ padding: "10px 0" }}
-                  >
-                    Install Fake Data
-                  </Button>
-                </Box>
-              </Grid2>
             </Grid2>
           </Container>
         </Box>

@@ -16,7 +16,7 @@ import {
   Paper
 } from "@mui/material";
 import { SettingsModal } from "./RenderMain";
-
+import InstallTrackingScriptButton from "./InstallTrackingScriptButton";
 import DeleteIcon from "@mui/icons-material/Delete"; // For snippet deletion
 import axios from "axios";
 
@@ -428,6 +428,17 @@ const RecommendationUI = () => {
             console.error('There was an error saving the settings and snippets:', error);
           }
     }
+
+
+
+    const handle = async () => {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/generate_fake_data/`,
+        {},
+        { headers: { "Content-Type": "application/json",'ngrok-skip-browser-warning': 'true', } }
+      );
+      // Handle response if needed
+    };
   return (
     
 
@@ -462,7 +473,23 @@ const RecommendationUI = () => {
       {/* Second Section (Snippet Management) */}
       <Box display="flex" sx={{ width: '50%' }}>
         <Paper elevation={3} sx={{ padding: 2, width: '100%' }}>
-          <SnippetManagementSection />
+        <Typography variant="h6" gutterBottom>
+                    Track Customer
+                  </Typography>
+                  <InstallTrackingScriptButton addCustInfo={true} shopId={localStorage.getItem("shopParams")} />
+                  <Typography variant="h6" gutterBottom>
+                    Install Fake Data
+                  </Typography>
+
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    onClick={handle}
+                    sx={{ padding: "10px 0" }}
+                  >
+                    Install Fake Data
+                  </Button>
         </Paper>
       </Box>
     

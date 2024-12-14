@@ -127,7 +127,6 @@ const BaseComponent = (props) => {
         break;
     }
 
-
   };
   // Re-parse the HTML after style changes
   React.useEffect(() => {

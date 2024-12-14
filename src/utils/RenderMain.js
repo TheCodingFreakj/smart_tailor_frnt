@@ -15,6 +15,7 @@ export const SettingsModal = ({ selectedCustomer,submitData, configData, open, s
       <Dialog open={open} onClose={handleClose} fullScreen >
         <DialogTitle>Settings</DialogTitle>
         <DialogContent>
+
             
           {/* Render settings only if selectedCustomer is not empty and configData has data */}
           {configData !== null && Object.keys(configData).length !== 0 && (
