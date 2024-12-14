@@ -100,7 +100,7 @@ const ProductCard = ({ selectedCustomer }) => {
             </div>
 
             <div style={{ marginLeft: "20px" }}>
-                <ShowHideSlider shopId={localStorage.getItem("shopParams")} />
+                <ShowHideSlider selectedCustomer={selectedCustomer} shopId={localStorage.getItem("shopParams")} />
             </div>
       </div>
 

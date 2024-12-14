@@ -130,143 +130,7 @@ const NestedFieldSection = ({
   </Box>
 );
 
-const SnippetManagementSection = () => {
-    const [newSnippet, setNewSnippet] = useState(''); // State for new code snippet
-    const [snippets, setSnippets] = useState([]); // Store list of custom snippets
-    const [htmlSnippet, setHtmlSnippet] = useState(`<div class="card">
-      <h2>Card Title</h2>
-      <p>This is an example card component. You can style it using CSS and add interactivity with JavaScript.</p>
-      <button class="card-button">Click Me</button>
-    </div>`);
-    const [cssSnippet, setCssSnippet] = useState(`.card {
-      background-color: #fff;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      width: 300px;
-      margin: 20px;
-    }`);
-    const [jsSnippet, setJsSnippet] = useState(`document.querySelector('.card-button').addEventListener('click', function() {
-      alert('Button clicked!');
-    });`);
-    const [previewHtml, setPreviewHtml] = useState('');
-    const [codeSnippets, setCodeSnippets] = useState([]); // Store fetched snippets from API
-    const [selectedSnippet, setSelectedSnippet] = useState(null); // Track selected snippet
-    const [jsonHolder, setJsonHolder] = useState(null); // Track the JSON associated with the selected snippet
-  
-    // Handle snippet selection
-    const handleSnippetSelect = (e) => {
-      const selectedId = e.target.value;
-      const selectedSnippet = codeSnippets.find(s => s.id === selectedId);
-      if (selectedSnippet) {
-        setJsonHolder(selectedSnippet.components_json);
-      }
-    };
-  
-    // Handle snippet creation
-    const handleCreateSnippet = () => {
-      if (newSnippet) {
-        setSnippets((prevSnippets) => [...prevSnippets, newSnippet]);
-        setNewSnippet('');
-      }
-    };
-  
-    // Handle snippet deletion
-    const handleDeleteSnippet = (snippet) => {
-      setSnippets((prevSnippets) => prevSnippets.filter((item) => item !== snippet));
-    };
-  
-    // Function to preview the HTML
-    const handlePreview = () => {
-      const html = `
-        <html>
-          <head>
-            <style>${cssSnippet}</style>
-          </head>
-          <body>
-            ${htmlSnippet}
-            <script>${jsSnippet}</script>
-          </body>
-        </html>
-      `;
-      setPreviewHtml(html);
-    };
-  
-    // Fetch snippets from API on component mount
-    useEffect(() => {
-      async function fetchData() {
-        try {
-          const response = await axios.get(`${process.env.REACT_APP_API_URL}/dynamic-components-list/`, {headers:{'ngrok-skip-browser-warning': 'true'}});
-          setCodeSnippets(response.data);
-        } catch (error) {
-          console.error("Error fetching snippets:", error);
-        }
-      }
-      fetchData();
-    }, []);
-  
-    return (
-      <Box sx={{ padding: 2 }}>
-        {/* Snippet Selection */}
-        <ReusableSelect
-          label="Select Snippet"
-          value={selectedSnippet}
-          onChange={handleSnippetSelect}
-          options={codeSnippets}
-        />
-  
-        {/* Snippet Preview */}
-        <Button variant="contained" onClick={handlePreview}>Preview Snippet</Button>
-        <Box sx={{ marginTop: 2 }}>
-          <Typography variant="h6">Preview:</Typography>
-          <div dangerouslySetInnerHTML={{ __html: previewHtml }} />
-        </Box>
-  
-        {/* Create New Snippet Section */}
-        <Box sx={{ marginTop: "24px" }}>
-          <Typography variant="h6">Create New Snippet</Typography>
-          <ReusableTextField
-            label="HTML Snippet"
-            value={htmlSnippet}
-            onChange={(e) => setHtmlSnippet(e.target.value)}
-          />
-          <ReusableTextField
-            label="CSS Snippet"
-            value={cssSnippet}
-            onChange={(e) => setCssSnippet(e.target.value)}
-          />
-          <ReusableTextField
-            label="JS Snippet"
-            value={jsSnippet}
-            onChange={(e) => setJsSnippet(e.target.value)}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ marginTop: "16px" }}
-            onClick={handleCreateSnippet}
-          >
-            Create Snippet
-          </Button>
-        </Box>
-  
-        {/* Display Snippets List */}
-        <Box sx={{ marginTop: "24px" }}>
-          <Typography variant="h6">Saved Snippets</Typography>
-          <List>
-            {snippets.map((snippet, index) => (
-              <ListItem key={index}>
-                <ListItemText primary={snippet} />
-                <IconButton onClick={() => handleDeleteSnippet(snippet)}>
-                  <DeleteIcon />
-                </IconButton>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </Box>
-    );
-  };
+
   
 const ReusableButton = ({ label, onClick, color = 'primary', variant = 'contained' }) => (
     <Button
@@ -457,6 +321,8 @@ const RecommendationUI = () => {
             label="Open Settings"
             onClick={handleOpenModal}
           />}
+
+          {customers.length ==0 && <div>The Customer Has nt visited yet, let them visit.</div>}
 
         </Paper>
         <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}> <SettingsModal
